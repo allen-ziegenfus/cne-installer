@@ -6,7 +6,7 @@ Welcome to the Liferay Cloud Native GCP Installer. This guided tutorial will wal
 To get started, click **Next**.
 
 ## Build the Installer
-First, we will compile the Go source code into an executable binary. This ensures that the environment has all necessary dependencies.
+First, we will compile the Go source code into an executable binary.
 
 Run the following command in your terminal:
 
@@ -14,12 +14,21 @@ Run the following command in your terminal:
 go build -o installer main.go
 ```
 
-Once the build is complete, click **Next**.
+## Select GCP Project
+Before running the installer, you need to select the Google Cloud project where you want to deploy Liferay.
+
+Click the button below to select your project:
+
+<walkthrough-project-setup></walkthrough-project-setup>
+
+Once selected, you can verify it in your terminal:
+
+```sh
+gcloud config get-value project
+```
 
 ## Run the Installer
-Now you can execute the installer. This script will guide you through the GCP configuration.
-
-Click the button below to run the binary:
+Now you can execute the installer. The script will use the project you just selected.
 
 ```sh
 ./installer
@@ -28,11 +37,6 @@ Click the button below to run the binary:
 <walkthrough-footnote>Note: The installer is currently in a placeholder state and will not modify your GCP resources yet.</walkthrough-footnote>
 
 ## Summary
-You have successfully built and run the installer. 
-
-In a production environment, this script would now:
-1. Prompt for **GCP Project** selection.
-2. **Enable APIs** (Compute, Kubernetes, etc.).
-3. Initialize **Terraform/OpenTofu** to provision infrastructure.
+You have successfully built the installer and configured your GCP project.
 
 You can <walkthrough-editor-open-file filePath="main.go">explore the code</walkthrough-editor-open-file> to see how it's implemented.
