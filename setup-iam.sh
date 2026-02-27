@@ -33,11 +33,6 @@ gcloud projects add-iam-policy-binding "$PROJECT_ID" \
     --role="roles/config.agent" \
     --quiet
 
-echo "✅ IAM Configuration Complete."
-
-
-# Get the project number for the Cloud Build Service Agent
-PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
 CLOUD_BUILD_SA="${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
 
 echo "Granting Cloud Build SA permissions to manage Infra Manager..."
@@ -54,3 +49,5 @@ gcloud iam service-accounts add-iam-policy-binding "infra-manager-runner@${PROJE
     --role="roles/iam.serviceAccountUser" \
     --project="$PROJECT_ID" \
     --quiet
+
+echo "✅ IAM Configuration Complete."

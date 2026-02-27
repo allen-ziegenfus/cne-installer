@@ -38,7 +38,7 @@ Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 ### 2. Run the Creation Script
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
-<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View creat_tfstate_bucket.sh</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View create_tfstate_bucket.sh</walkthrough-editor-open-file>
 
 ```sh
 ./create_tfstate_bucket.sh <walkthrough-project-id/>
@@ -57,4 +57,16 @@ The script below will generate a service account and allow Cloud Build to run wi
 
 ```sh
 ./setup-iam.sh <walkthrough-project-id/>
+```
+
+## Kick off the build
+Now we can invoke Cloud Build and Infrastructure Manager to actually run the build!
+
+### 1. Run the build
+The script below will actually invoke the terraform build
+
+<walkthrough-editor-open-file filePath="./submit_build.sh">View submit_build.sh</walkthrough-editor-open-file>
+
+```sh
+./submit_build.sh
 ```
