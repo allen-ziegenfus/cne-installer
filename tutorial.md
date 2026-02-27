@@ -38,7 +38,7 @@ Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 ### 2. Run the Creation Script
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
-<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View Script State</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View creat_tfstate_bucket.sh</walkthrough-editor-open-file>
 
 ```sh
 ./create_tfstate_bucket.sh <walkthrough-project-id/>
@@ -46,3 +46,15 @@ The script below will generate a unique bucket name, prompt you for your preferr
 
 > [!TIP]
 > This script also sets your `TF_VAR` environment variables so Infrastructure Manager knows which region to use for the rest of the install.
+
+## Create Service Accounts
+To run the terraform scripts with Infrastructure Manager and Cloud Build we need to create a service account and permissions for the cloud build runner. 
+
+### 1. Run the IAM Setup
+The script below will generate a service account and allow Cloud Build to run with the configured permissions. 
+
+<walkthrough-editor-open-file filePath="./setup-iam.sh">View setup-iam.sh</walkthrough-editor-open-file>
+
+```sh
+./setup-iam.sh <walkthrough-project-id/>
+```
