@@ -10,7 +10,9 @@ data "google_secret_manager_secret_version" "cloudflare_api_token" {
 
 # 2. Configure the Cloudflare Provider using that token
 provider "cloudflare" {
-  api_token = var.enable_cloudflare ? data.google_secret_manager_secret_version.cloudflare_api_token[0].secret_data : "dummy"
+  # The provider requires a valid format even if not used. 
+  # We provide a 40-char dummy string if Cloudflare is disabled.
+  api_token = var.enable_cloudflare ? data.google_secret_manager_secret_version.cloudflare_api_token[0].secret_data : "0000000000000000000000000000000000000000"
 }
 
 provider "kubernetes" {

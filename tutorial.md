@@ -90,8 +90,10 @@ Before running the deployment, you can customize your environment by editing the
 Some features require secrets to be stored in Google Secret Manager before deployment.
 
 *   **Liferay DXP License:** (Mandatory for DXP)
+    1.  Upload your license XML file to Cloud Shell (use the **⋮ (three dots)** menu > **Upload**).
+    2.  Run the script pointing to your file:
     ```sh
-    ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-liferay-license-xml
+    ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-liferay-license-xml path/to/your/license.xml
     ```
 
 *   **Cloudflare Integration:**
