@@ -17,7 +17,7 @@ Before running the installer, you need to select the Google Cloud project where 
 Once selected, click the button below to sync your terminal environment:
 
 ```sh
-gcloud config set project {{project-id}}
+gcloud config set project <walkthrough-project-id/>
 ```
 
 ## Enable APIs
@@ -38,10 +38,10 @@ Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 ### 2. Run the Creation Script
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
-<walkthrough-editor-open-file filePath="create_tfstate_bucket.sh">View Script State</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View Script State</walkthrough-editor-open-file>
 
 ```sh
-./create_tfstate_bucket.sh {{project-id}}
+./create_tfstate_bucket.sh <walkthrough-project-id/>
 ```
 
 > [!TIP]
