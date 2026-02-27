@@ -2,6 +2,7 @@ resource "helm_release" "gateway_crds" {
   name             = "gateway-crds"
   chart            = "${path.module}/helm/gateway-crds"
   namespace        = "infra"
+  create_namespace = true
   version          = "1.0.0"
 }
 
