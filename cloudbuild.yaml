@@ -39,5 +39,3 @@ substitutions:
 serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
 dynamic_substitutions: true
 
-options:
-  logging: CLOUD_LOGGING_ONLY

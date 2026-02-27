@@ -40,5 +40,4 @@ echo "------------------------------------"
 
 gcloud beta builds submit . \
     --config=cloudbuild.yaml \
-    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET" \
-    --stream
+    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET" 
