@@ -41,11 +41,11 @@ The script below will generate a unique bucket name, prompt you for your preferr
 <walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View create_tfstate_bucket.sh</walkthrough-editor-open-file>
 
 ```sh
-./create_tfstate_bucket.sh <walkthrough-project-id/>
+source ./create_tfstate_bucket.sh <walkthrough-project-id/>
 ```
 
-> [!TIP]
-> This script also sets your `TF_VAR` environment variables so Infrastructure Manager knows which region to use for the rest of the install.
+> [!IMPORTANT]
+> We use `source` to ensure the bucket name and region are saved as environment variables in your current session for the next steps.
 > You can verify the bucket in the [Cloud Storage Browser](https://console.cloud.google.com/storage/browser?project=<walkthrough-project-id/>).
 
 ## Create Service Accounts
