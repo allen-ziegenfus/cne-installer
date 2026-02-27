@@ -1,0 +1,30 @@
+{{- $env := index .context "apiextensions.crossplane.io/environment" -}}
+{{- $xr := .observed.composite.resource -}}
+{{- $namespace := $xr.metadata.namespace -}}
+{{- $gsaName := printf "%s-sa" $xr.metadata.name -}}
+{{- $gsaEmail := printf "%s@%s.iam.gserviceaccount.com" $gsaName $env.projectId -}}
+{{- $databaseSpec := $xr.spec.database.blue -}}
+{{- $databaseName := $xr.spec.database.name | default "lportal" -}}
+{{- /* Truncated for Postgres IAM */ -}}
+{{- $databaseIamUser := printf "%s@%s.iam" $gsaName $env.projectId -}}
+{{- $hash := printf "%s-%s" $databaseName $env.projectId | sha256sum | trunc 7 -}}
+{{- $jobName := printf "%s-db-grant" $xr.metadata.name -}}
+{{- $databaseInstanceName := printf "%s-db-instance"  $xr.metadata.name -}}
+{{- $databasePort := "5432" -}}
+{{- $region := $databaseSpec.region | default "us-central1" -}}
+{{- $instanceConnectionName := printf "%s:%s:%s" $env.projectId $region $databaseInstanceName -}}
+{{- $deletionProtection := $xr.spec.deletionProtection | default false -}}
+{{- $managementPolicies := $deletionProtection | ternary (list "Create" "Observe" "Update") (list "*") | toJson -}}
+{{- $managementPoliciesNoUpdate := $deletionProtection | ternary (list "Create" "Observe") (list "Create" "Delete" "Observe") | toJson -}}
+{{- $managementPoliciesOnce := (list "Create" "Observe" "Delete") | toJson -}}
+
+
+{{- $environmentId := $xr.spec.environmentId -}}
+{{- $projectId := $xr.spec.projectId -}}
+{{- $projectIdFull := printf "%s-%s" $projectId $environmentId -}}
+{{- $uidHash := printf "%s-%s" $env.projectNumber $projectIdFull | sha256sum | trunc 6 -}}
+{{- $baseName := printf "%.18s-%s" $projectIdFull $uidHash -}}
+
+{{- $githubPoolName := printf "projects/%s/locations/global/workloadIdentityPools/%s" ($env.projectNumber | toString) $env.githubWorkloadIdentityPoolId -}}
+
+{{- $overlay := $xr.spec.overlay | default dict -}}

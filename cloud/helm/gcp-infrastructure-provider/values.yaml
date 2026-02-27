@@ -1,0 +1,9 @@
+gcp:
+  projectId: ""
+  clusterName: ""
+  githubWorkloadIdentityPoolId: ""
+  sqlGoogleServiceAccountEmail: ""
+  storageGoogleServiceAccountEmail: ""
+  computeGoogleServiceAccountEmail: ""
+  cloudplatformGoogleServiceAccountEmail: ""
+crossplaneNamespace: crossplane-system

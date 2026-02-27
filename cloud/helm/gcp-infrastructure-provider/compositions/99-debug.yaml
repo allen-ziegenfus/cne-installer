@@ -1,0 +1,11 @@
+{{- if .observed.composite.resource.metadata.labels.debug -}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: debug-context
+  namespace: {{ .observed.composite.resource.metadata.namespace }}
+data:
+  context: |
+    {{- . | toJson }}
+{{- end -}}

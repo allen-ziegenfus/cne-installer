@@ -1,0 +1,24 @@
+# templates/gateway.yaml
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: shared-gateway
+  namespace: {{ .Release.Namespace }}
+spec:
+  gatewayClassName: eg
+  # LINK TO THE CONFIG ABOVE
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: custom-proxy-config
+  listeners:
+  {{- range $index, $domain := .Values.domains }}
+  - name: http-{{ $index }}
+    protocol: HTTP
+    port: 80
+    hostname: "*.{{ $domain }}"
+    allowedRoutes:
+      namespaces:
+        from: All
+  {{- end }}

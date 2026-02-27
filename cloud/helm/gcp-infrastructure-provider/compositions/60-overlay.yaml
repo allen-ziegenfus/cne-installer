@@ -1,0 +1,85 @@
+---
+{{- $overlayGsaName := printf "liferay-overlay-%s-%s-sa" $projectId $environmentId -}}
+{{- $overlayGsaEmail := printf "%s@%s.iam.gserviceaccount.com" $overlayGsaName $env.projectId -}}
+# 1. Overlay Bucket
+apiVersion: storage.gcp.m.upbound.io/v1beta1
+kind: Bucket
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-bucket
+  name: {{ $baseName }}-overlay
+spec:
+  forProvider:
+    location: {{ $region }}
+    storageClass: STANDARD
+    uniformBucketLevelAccess: true
+    forceDestroy: true
+  managementPolicies: {{ $managementPolicies }}
+---
+# 2. Overlay Service Account (for GitHub Actions to push)
+apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
+kind: ServiceAccount
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-sa
+  name: {{ $overlayGsaName }}
+spec:
+  forProvider:
+    displayName: "Liferay Overlay GSA for {{ $overlay.githubRepo }}"
+
+---
+# 3. Grant Storage Object User to the Overlay SA on the Bucket
+apiVersion: storage.gcp.m.upbound.io/v1beta1
+kind: BucketIAMMember
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-sa-bucket-iam
+spec:
+  forProvider:
+    bucketRef:
+      name: {{ $baseName }}-overlay
+    role: roles/storage.objectUser
+    member: "serviceAccount:{{ $overlayGsaEmail }}"
+  managementPolicies: {{ $managementPolicies }}
+
+---
+# 4. Workload Identity Federation Binding for GitHub Actions
+apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
+kind: ServiceAccountIAMMember
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-wif-binding
+spec:
+  forProvider:
+    serviceAccountId: "projects/{{ $env.projectId }}/serviceAccounts/{{ $overlayGsaEmail }}"
+    role: roles/iam.workloadIdentityUser
+    member: "principalSet://iam.googleapis.com/{{ $githubPoolName }}/attribute.repository/{{ $overlay.githubRepo }}"
+
+---
+# 5. Grant Liferay GSA Read Access to the Overlay Bucket
+apiVersion: storage.gcp.m.upbound.io/v1beta1
+kind: BucketIAMMember
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-gsa-overlay-bucket-iam
+spec:
+  forProvider:
+    bucketRef:
+      name: {{ $baseName }}-overlay
+    role: roles/storage.objectViewer
+    member: "serviceAccount:{{ $gsaEmail }}"
+  managementPolicies: {{ $managementPolicies }}
+
+---
+# 6. Grant Artifact Registry Writer to the Overlay SA
+apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
+kind: ProjectIAMMember
+metadata:
+  annotations:
+    gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-sa-artifact-registry-writer
+spec:
+  forProvider:
+    project: {{ $env.projectId }}
+    role: roles/artifactregistry.writer
+    member: "serviceAccount:{{ $overlayGsaEmail }}"
+  managementPolicies: {{ $managementPolicies }}

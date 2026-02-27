@@ -1,0 +1,177 @@
+{{- $crossplaneNamespace := .Values.crossplaneNamespace | default "crossplane-system" -}}
+
+# 1. Runtime Config for the Kubernetes Provider
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-90"
+    name: kubernetes-config
+spec:
+    deploymentTemplate:
+        spec:
+            selector:
+                matchLabels:
+                    pkg.crossplane.io/provider: provider-kubernetes
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: provider-kubernetes
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 500m
+                                    memory: 512Mi
+                                requests:
+                                    cpu: 100m
+                                    memory: 128Mi
+                    serviceAccountName: provider-kubernetes
+    serviceAccountTemplate:
+        metadata:
+            name: provider-kubernetes
+
+---
+
+# 2. Runtime Config for GCP Cloud SQL Provider
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-90"
+    name: gcp-sql-config
+spec:
+    deploymentTemplate:
+        spec:
+            selector:
+                matchLabels:
+                    pkg.crossplane.io/provider: provider-gcp-sql
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: provider-gcp-sql
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 1000m
+                                    memory: 1.5Gi
+                                requests:
+                                    cpu: 200m
+                                    memory: 256Mi
+                    serviceAccountName: provider-gcp-sql
+    serviceAccountTemplate:
+        metadata:
+            annotations:
+                iam.gke.io/gcp-service-account: {{ $.Values.gcp.sqlGoogleServiceAccountEmail }}
+            name: provider-gcp-sql
+
+---
+
+# 3. Runtime Config for GCP Storage (GCS) Provider
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-90"
+    name: gcp-storage-config
+spec:
+    deploymentTemplate:
+        spec:
+            selector:
+                matchLabels:
+                    pkg.crossplane.io/provider: provider-gcp-storage
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: provider-gcp-storage
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 500m
+                                    memory: 512Mi
+                                requests:
+                                    cpu: 100m
+                                    memory: 128Mi
+                    serviceAccountName: provider-gcp-storage
+    serviceAccountTemplate:
+        metadata:
+            annotations:
+                iam.gke.io/gcp-service-account: {{ $.Values.gcp.storageGoogleServiceAccountEmail }}
+            name: provider-gcp-storage
+
+---
+
+# 4. Runtime Config for GCP Compute Provider
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-90"
+    name: gcp-compute-config
+spec:
+    deploymentTemplate:
+        spec:
+            selector:
+                matchLabels:
+                    pkg.crossplane.io/provider: provider-gcp-compute
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: provider-gcp-compute
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 1000m
+                                    memory: 1.5Gi
+                                requests:
+                                    cpu: 200m
+                                    memory: 256Mi
+                    serviceAccountName: provider-gcp-compute
+    serviceAccountTemplate:
+        metadata:
+            annotations:
+                iam.gke.io/gcp-service-account: {{ $.Values.gcp.computeGoogleServiceAccountEmail }}
+            name: provider-gcp-compute
+
+---
+
+# 4. Runtime Config for GCP Compute Provider
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-90"
+    name: gcp-cloudplatform-config
+spec:
+    deploymentTemplate:
+        spec:
+            selector:
+                matchLabels:
+                    pkg.crossplane.io/provider: provider-gcp-cloudplatform
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: provider-gcp-cloudplatform
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 1000m
+                                    memory: 1.5Gi
+                                requests:
+                                    cpu: 200m
+                                    memory: 256Mi
+                    serviceAccountName: provider-gcp-cloudplatform
+    serviceAccountTemplate:
+        metadata:
+            annotations:
+                iam.gke.io/gcp-service-account: {{ $.Values.gcp.cloudplatformGoogleServiceAccountEmail }}
+            name: provider-gcp-cloudplatform
