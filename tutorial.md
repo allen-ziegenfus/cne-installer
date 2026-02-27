@@ -72,3 +72,19 @@ The script below will actually invoke the terraform build
 ```sh
 ./submit_build.sh <walkthrough-project-id/>
 ```
+
+### 2. Monitor Progress
+Once the build is submitted, you can track its progress and view logs in the Google Cloud Console.
+
+*   [View Build History in Console](https://console.cloud.google.com/cloud-build/builds?project=<walkthrough-project-id/>)
+*   [View Infrastructure Manager Deployments](https://console.cloud.google.com/google/artifacts/deployments?project=<walkthrough-project-id/>)
+
+## Verify the Cluster
+After the Infrastructure Manager deployment finishes, your GKE cluster will be ready.
+
+### View GKE Cluster
+You can inspect the cluster nodes, workloads, and services in the Kubernetes Engine dashboard.
+
+*   [View GKE Clusters](https://console.cloud.google.com/kubernetes/list/overview?project=<walkthrough-project-id/>)
+
+Congratulations! You have successfully initiated the Liferay Cloud Native deployment on GCP.
