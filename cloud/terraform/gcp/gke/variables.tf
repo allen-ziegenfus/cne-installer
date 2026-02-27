@@ -60,5 +60,19 @@ variable "domains" {
   type        = list(string)
 }
 
-variable "cloudflare_account_id" { type = string }
-variable "cloudflare_zone_id" { type = string }
+variable "enable_cloudflare" {
+  type        = bool
+  default     = false
+  description = "Whether to enable Cloudflare Zero Trust Tunnel and DNS management"
+}
+
+variable "cloudflare_account_id" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
+variable "cloudflare_zone_id" {
+  type    = string
+  default = ""
+}

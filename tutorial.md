@@ -35,6 +35,9 @@ Infrastructure Manager needs a place to store the Terraform "state" (the record 
 ### 1. Choose a Region
 Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 
+> [!NOTE]
+> **Cloudflare Integration:** By default, Cloudflare Zero Trust Tunnel is **disabled**. If you wish to enable it, you must set `enable_cloudflare = true` and provide your `cloudflare_account_id` and `cloudflare_zone_id` in your Terraform variables.
+
 ### 2. Run the Creation Script
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
