@@ -19,7 +19,7 @@ gcloud config set compute/region "$REGION_NAME" --project="$PROJECT_ID"
 export TF_VAR_region="$REGION_NAME"
 
 # Update terraform.tfvars locally
-TFVARS_FILE="cloud/terraform/gcp/gke/terraform.tfvars"
+TFVARS_FILE="terraform.tfvars"
 if [ -f "$TFVARS_FILE" ]; then
     sed -i '/project_id/d' "$TFVARS_FILE"
     sed -i '/region/d' "$TFVARS_FILE"

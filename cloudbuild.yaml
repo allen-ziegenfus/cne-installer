@@ -17,17 +17,7 @@ steps:
       - '--compact'
       - '--soft-fail'
 
-  # Step 2: Sync Config
-  # Copies the local tfvars (now uploaded by Cloud Build) to the platform directory
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    id: 'Sync Config'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        cp cloud/terraform/gcp/gke/terraform.tfvars cloud/terraform/gcp/gitops/platform/terraform.tfvars
-
-  # Step 3: Security Scan (Trivy)
+  # Step23: Security Scan (Trivy)
   - name: 'aquasec/trivy:latest'
     id: 'Security Scan - Trivy'
     entrypoint: 'trivy'
@@ -36,6 +26,19 @@ steps:
       - '.'
       - '--severity=HIGH,CRITICAL'
       - '--exit-code=0'
+
+  # Step 3: Deploy Artifact Registry (GAR)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Deploy GAR'
+    entrypoint: 'gcloud'
+    args: 
+      - 'infra-manager'
+      - 'deployments'
+      - 'apply'
+      - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gar-registry'
+      - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
+      - '--local-source=cloud/terraform/gcp/gar'
+      - '--inputs-file=terraform.tfvars'
 
   # Step 4: Deploy the Network/Base stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -48,7 +51,7 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gke-network'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--local-source=cloud/terraform/gcp/gke'
-      - '--inputs-file=cloud/terraform/gcp/gke/terraform.tfvars'
+      - '--inputs-file=terraform.tfvars'
 
   # Step 5: Deploy the GKE/Cluster stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -61,7 +64,7 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gitops-platform'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--local-source=cloud/terraform/gcp/gitops/platform'
-      - '--inputs-file=cloud/terraform/gcp/gitops/platform/terraform.tfvars'
+      - '--inputs-file=terraform.tfvars'
 
 substitutions:
   _REGION: 'us-central1'

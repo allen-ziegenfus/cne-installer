@@ -13,7 +13,8 @@ variable "external_secrets_namespace" {
 
 
 variable "argocd_domain" {
-  type = string
+  type    = string
+  default = ""
 }
 
 variable "argocd_github_webhook_config" {
@@ -32,15 +33,15 @@ variable "argocd_auth_config" {
   description = "Configuration object for ArgoCD authentication and RBAC"
   type = object({
     enable_sso = optional(bool, false)
-    github = object({
+    github = optional(object({
       org                       = string
       teams                     = list(string)
       client_id_secret_name     = optional(string, "github-client-id")
       client_secret_secret_name = optional(string, "github-client-secret")
-    })
-    rbac = object({
+    }))
+    rbac = optional(object({
       admins = list(string)
-    })
+    }))
   })
 
   default = {

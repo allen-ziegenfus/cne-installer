@@ -24,7 +24,7 @@ else
 fi
 
 # 2. Grant the Service Account project editor/admin roles 
-RESOURCES_ROLES=("roles/editor" "roles/owner" "roles/logging.logWriter" "roles/storage.objectViewer")
+RESOURCES_ROLES=("roles/editor" "roles/owner" "roles/logging.logWriter" "roles/storage.objectViewer" "roles/secretmanager.secretAccessor")
 
 echo "Ensuring project-level IAM bindings..."
 for ROLE in "${RESOURCES_ROLES[@]}"; do

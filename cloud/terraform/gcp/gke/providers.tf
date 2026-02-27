@@ -1,10 +1,17 @@
 # Switches the provider to google and updates authentication for Helm/Kubernetes to use GKE.
 
-
-# We leave this empty so it inherits Project ID, Region, and Labels 
-# from your environments/dev/main.tf
 data "google_client_config" "default" {}
 
+# 1. Fetch the API Token from GCP Secret Manager (if Cloudflare is enabled)
+data "google_secret_manager_secret_version" "cloudflare_api_token" {
+  count  = var.enable_cloudflare ? 1 : 0
+  secret = "cloudflare-api-token"
+}
+
+# 2. Configure the Cloudflare Provider using that token
+provider "cloudflare" {
+  api_token = var.enable_cloudflare ? data.google_secret_manager_secret_version.cloudflare_api_token[0].secret_data : "dummy"
+}
 
 provider "kubernetes" {
   host                   = "https://${module.gke.endpoint}"
@@ -46,10 +53,6 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 5.0"
     }
-  
- 
-   
-    }
-    required_version = ">= 1.5.0"
-    }
-
+  }
+  required_version = ">= 1.5.0"
+}

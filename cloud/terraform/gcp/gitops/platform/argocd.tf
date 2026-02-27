@@ -25,7 +25,7 @@ resource "helm_release" "argocd" {
         }
 
         global = {
-          domain = var.argocd_domain
+          domain = var.argocd_domain != "" ? var.argocd_domain : null
           logging = {
             format = "json"
             level  = "info"
@@ -159,6 +159,7 @@ resource "random_password" "argocd_server_secretkey" {
 }
 
 resource "kubernetes_manifest" "argocd_http_route" {
+  count = var.argocd_domain != "" ? 1 : 0
   manifest = {
     "apiVersion" = "gateway.networking.k8s.io/v1"
     "kind"       = "HTTPRoute"

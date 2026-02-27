@@ -10,6 +10,26 @@
 # Example: ["example.com", "myportal.io"]
 # domains = []
 
+# ArgoCD Domain: Specifically for accessing the ArgoCD UI.
+# argocd_domain = "argocd.example.com"
+
+# ArgoCD Auth: Enable GitHub SSO and RBAC.
+# argocd_auth_config = {
+#   enable_sso = true
+#   github = {
+#     org   = "your-github-org"
+#     teams = ["your-admin-team"]
+#   }
+#   rbac = {
+#     admins = ["your-github-username"]
+#   }
+# }
+
+# ArgoCD Webhook: Enable instant syncing on GitHub push.
+# argocd_github_webhook_config = {
+#   enable_webhook = true
+# }
+
 # Cloudflare Integration: Enable Zero Trust Tunneling and DNS management.
 # enable_cloudflare     = false
 # cloudflare_account_id = ""

@@ -56,13 +56,62 @@ The script below will generate a service account and allow Cloud Build to run wi
 > [!TIP]
 > You can verify the created service account and its permissions in the [IAM Service Accounts Console](https://console.cloud.google.com/iam-admin/serviceaccounts?project=<walkthrough-project-id/>).
 
+## Prepare GitOps Repository
+Before deploying the GitOps platform, you need to create your own repository from the Liferay Cloud Native template.
+
+### 1. Create Repository from Template
+Click the link below to create a new repository in your GitHub account using the boilerplate:
+
+[Create Repository from Template](https://github.com/LiferayCloud/cloud-native-gitops-boilerplate/generate)
+
+### 2. Configure GitHub App
+To allow ArgoCD to sync from your new repository and provide SSO for your team, create a GitHub App:
+
+[Create GitHub App](https://github.com/settings/apps/new)
+
+**Required Settings:**
+*   **Homepage URL:** `https://argocd.<your-domain>`
+*   **Callback URL:** `https://argocd.<your-domain>/api/dex/callback`
+*   **Webhook URL:** `https://argocd.<your-domain>/api/webhook`
+*   **Repository Permissions:**
+    *   `Contents`: Read-only
+    *   `Metadata`: Read-only
+    *   `Webhooks`: Read & write
+*   **Organization Permissions:**
+    *   `Members`: Read-only (for SSO groups)
+
+> [!TIP]
+> After creating the app, generate a **Client Secret** and a **Webhook Secret**. You will need these for the next step.
+
 ## Optional: Advanced Configuration
 Before running the deployment, you can customize your environment by editing the Terraform variables file directly.
+
+### Required Secrets
+Some features require secrets to be stored in Google Secret Manager before deployment.
+
+*   **Liferay DXP License:** (Mandatory for DXP)
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-liferay-license-xml
+    ```
+
+*   **Cloudflare Integration:**
+    To use Cloudflare, store your API Token in Secret Manager:
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> cloudflare-api-token
+    ```
+
+*   **GitHub SSO/GitOps Secrets:**
+    If you plan to use GitHub for ArgoCD authentication or Webhooks, store these secrets:
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> github-webhook-secret
+    ./setup-secret.sh <walkthrough-project-id/> github-client-id
+    ./setup-secret.sh <walkthrough-project-id/> github-client-secret
+    ```
 
 ### Edit Variables
 Click the button below to open the variables file in the editor:
 
-<walkthrough-editor-open-file filePath="cloud/terraform/gcp/gke/terraform.tfvars">Open terraform.tfvars</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="terraform.tfvars">Open terraform.tfvars</walkthrough-editor-open-file>
 
 ### Common Settings
 You can copy/paste these examples into the file:
@@ -71,6 +120,20 @@ You can copy/paste these examples into the file:
     `authorized_ipv4_cidr_block = "YOUR_IP/32"`
 *   **Custom Domains:**
     `domains = ["example.com", "myportal.io"]`
+    `argocd_domain = "argocd.example.com"`
+*   **ArgoCD GitHub SSO:**
+    ```hcl
+    argocd_auth_config = {
+      enable_sso = true
+      github = {
+        org   = "your-github-org"
+        teams = ["your-admin-team"]
+      }
+      rbac = {
+        admins = ["your-github-username"]
+      }
+    }
+    ```
 *   **Cloudflare Integration:**
     ```hcl
     enable_cloudflare     = true
