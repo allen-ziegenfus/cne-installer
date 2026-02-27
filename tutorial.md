@@ -68,5 +68,5 @@ The script below will actually invoke the terraform build
 <walkthrough-editor-open-file filePath="./submit_build.sh">View submit_build.sh</walkthrough-editor-open-file>
 
 ```sh
-./submit_build.sh
+./submit_build.sh <walkthrough-project-id/>
 ```
