@@ -36,6 +36,3 @@ substitutions:
   _REPO_URL: 'https://github.com/your-org/your-repo'
   _STATE_BUCKET: ''
 
-serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
-dynamic_substitutions: true
-

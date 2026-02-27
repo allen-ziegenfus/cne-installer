@@ -28,7 +28,7 @@ resource "helm_release" "gateway_infra" {
     })
   ]
 
-  description = "Hash: ${filesha256("${path.module}/../../../helm/gateway-infra/values.yaml")}"
+  description = "Hash: ${filesha256("${path.module}/helm/gateway-infra/values.yaml")}"
 
   # Combine with this to ensure pods actually restart
   recreate_pods = true
