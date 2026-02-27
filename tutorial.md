@@ -35,17 +35,7 @@ Infrastructure Manager needs a place to store the Terraform "state" (the record 
 ### 1. Choose a Region
 Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 
-> [!NOTE]
-> **Cloudflare Integration:** By default, Cloudflare Zero Trust Tunnel is **disabled**. If you wish to enable it, you must set `enable_cloudflare = true` and provide your `cloudflare_account_id` and `cloudflare_zone_id` in your Terraform variables.
-
-> [!TIP]
-> **Securing Kubernetes Access:** By default, the GKE API is accessible to any authenticated user. To restrict access to only your specific IP address, set the `authorized_ipv4_cidr_block` variable to your public IP (e.g., `1.2.3.4/32`).
-
-> [!TIP]
-> **Custom Domains:** The `domains` variable is **optional**. If you don't provide any domains, the installer will set up the infrastructure without custom routing, and you can add domains later.
-
 ### 2. Run the Creation Script
-
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
 <walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View create_tfstate_bucket.sh</walkthrough-editor-open-file>
@@ -57,6 +47,36 @@ source ./create_tfstate_bucket.sh <walkthrough-project-id/>
 > [!IMPORTANT]
 > We use `source` to ensure the bucket name and region are saved as environment variables in your current session for the next steps.
 > You can verify the bucket in the [Cloud Storage Browser](https://console.cloud.google.com/storage/browser?project=<walkthrough-project-id/>).
+
+## Optional: Advanced Configuration
+Before running the deployment, you can customize your environment by setting optional variables.
+
+### How to set variables
+In this installer, we use environment variables prefixed with `TF_VAR_`. Terraform automatically picks these up. To set a variable, run the following in your terminal:
+
+```sh
+export TF_VAR_variable_name="value"
+```
+
+### Available Options
+
+*   **Authorized Networks:** Restrict GKE API access to your IP.
+    ```sh
+    export TF_VAR_authorized_ipv4_cidr_block="YOUR_IP/32"
+    ```
+*   **Custom Domains:** Provide a list of domains for routing.
+    ```sh
+    export TF_VAR_domains='["example.com", "myportal.io"]'
+    ```
+*   **Cloudflare Integration:** Enable Zero Trust Tunneling.
+    ```sh
+    export TF_VAR_enable_cloudflare=true
+    export TF_VAR_cloudflare_account_id="your-id"
+    export TF_VAR_cloudflare_zone_id="your-zone"
+    ```
+
+> [!TIP]
+> If you don't set these, the installer will use safe defaults (Authorized Networks disabled, no custom domains, Cloudflare disabled).
 
 ## Create Service Accounts
 To run the terraform scripts with Infrastructure Manager and Cloud Build we need to create a service account and permissions for the cloud build runner. 
@@ -82,7 +102,6 @@ The script below will actually invoke the terraform build
 <walkthrough-editor-open-file filePath="./submit_build.sh">View submit_build.sh</walkthrough-editor-open-file>
 <walkthrough-editor-open-file filePath="./cloudbuild.yaml">View cloudbuild.yaml</walkthrough-editor-open-file>
 
-
 ```sh
 ./submit_build.sh <walkthrough-project-id/>
 ```
@@ -91,7 +110,7 @@ The script below will actually invoke the terraform build
 Once the build is submitted, you can track its progress and view logs in the Google Cloud Console.
 
 *   [View Build History in Console](https://console.cloud.google.com/cloud-build/builds?project=<walkthrough-project-id/>)
-*   [View Infrastructure Manager Deployments](https://console.cloud.google.com/infra-manager/deployments?project=<walkthrough-project-id/>)
+*   [View Infrastructure Manager Deployments](https://console.cloud.google.com/infrastructure-manager/deployments?project=<walkthrough-project-id/>)
 
 ## Verify the Cluster
 After the Infrastructure Manager deployment finishes, your GKE cluster will be ready.

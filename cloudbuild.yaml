@@ -1,5 +1,32 @@
 steps:
-  # Step 1: Deploy the Network/Base stack
+  # Step 0: Build Helm Dependencies
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Build Helm Deps'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd cloud/terraform/gcp/gke/helm/gateway-infra && helm dependency build
+
+  # Step 1: Security Scan (Checkov) - Scans Terraform for misconfigurations
+  - name: 'bridgecrew/checkov:latest'
+    id: 'Security Scan - Checkov'
+    args:
+      - '--directory=.'
+      - '--compact'
+      - '--soft-fail' # Change to remove this if you want to block on security failures
+
+  # Step 2: Security Scan (Trivy) - Scans for vulnerabilities
+  - name: 'aquasec/trivy:latest'
+    id: 'Security Scan - Trivy'
+    entrypoint: 'trivy'
+    args:
+      - 'fs'
+      - '.'
+      - '--severity=HIGH,CRITICAL'
+      - '--exit-code=0' # Change to 1 if you want to block on security failures
+
+  # Step 3: Deploy the Network/Base stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy GKE'
     entrypoint: 'gcloud'
@@ -12,7 +39,7 @@ steps:
       - '--git-source-repo=${_REPO_URL}'
       - '--git-source-directory=cloud/terraform/gcp/gke'
       - '--git-source-ref=master'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
+      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET},authorized_ipv4_cidr_block=${_AUTH_NETWORKS},domains=${_DOMAINS},enable_cloudflare=${_ENABLE_CLOUDFLARE},cloudflare_account_id=${_CF_ACCOUNT},cloudflare_zone_id=${_CF_ZONE}'
 
   # Step 2: Deploy the GKE/Cluster stack (Wait for Network)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -28,11 +55,13 @@ steps:
       - '--git-source-directory=cloud/terraform/gcp/gitops/platform'
       - '--git-source-ref=master'
       - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
-
-
-
 substitutions:
   _REGION: 'us-central1'
   _REPO_URL: 'https://github.com/your-org/your-repo'
   _STATE_BUCKET: ''
+  _AUTH_NETWORKS: ''
+  _DOMAINS: '[]'
+  _ENABLE_CLOUDFLARE: 'false'
+  _CF_ACCOUNT: ''
+  _CF_ZONE: ''
 

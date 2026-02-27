@@ -30,14 +30,23 @@ if [ -z "$STATE_BUCKET" ]; then
 fi
 
 REPO_URL=$(git config --get remote.origin.url)
+# Collect optional TF_VARs to pass to Cloud Build
+OPTIONAL_VARS=""
+[ -n "$TF_VAR_authorized_ipv4_cidr_block" ] && OPTIONAL_VARS+=",_AUTH_NETWORKS=$TF_VAR_authorized_ipv4_cidr_block"
+[ -n "$TF_VAR_domains" ] && OPTIONAL_VARS+=",_DOMAINS=$TF_VAR_domains"
+[ -n "$TF_VAR_enable_cloudflare" ] && OPTIONAL_VARS+=",_ENABLE_CLOUDFLARE=$TF_VAR_enable_cloudflare"
+[ -n "$TF_VAR_cloudflare_account_id" ] && OPTIONAL_VARS+=",_CF_ACCOUNT=$TF_VAR_cloudflare_account_id"
+[ -n "$TF_VAR_cloudflare_zone_id" ] && OPTIONAL_VARS+=",_CF_ZONE=$TF_VAR_cloudflare_zone_id"
 
 echo "------------------------------------"
 echo "Submitting Build for Project: $PROJECT_ID"
 echo "Region: $TF_VAR_region"
 echo "Bucket: $STATE_BUCKET"
 echo "Repo:   $REPO_URL"
+echo "Options: ${OPTIONAL_VARS:1}"
 echo "------------------------------------"
 
 gcloud beta builds submit . \
     --config=cloudbuild.yaml \
-    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET" 
+    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET"${OPTIONAL_VARS} \
+    --stream
