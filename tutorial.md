@@ -16,10 +16,10 @@ Before running the installer, you need to select the Google Cloud project where 
 
 Once selected, click the button below to sync your terminal environment:
 
-<walkthrough-cloud-shell-editor-button
-  command="gcloud config set project {{project-id}}">
+<walkthrough-editor-button
+  terminalCommand="gcloud config set project {{project-id}}">
   Confirm Project Selection
-</walkthrough-cloud-shell-editor-button>
+</walkthrough-editor-button>
 
 ## Enable APIs
 The installer requires several Google Cloud APIs to be enabled to automate the creation and management of your environment. 
@@ -31,16 +31,16 @@ The installer requires several Google Cloud APIs to be enabled to automate the c
 </walkthrough-enable-apis>
 
 ## Create Terraform State Bucket
-Infrastructure Manager needs a place to store the Terraform "state" (the record of what has been built). We will create a secure, versioned Cloud Storage bucket for this.
+Infrastructure Manager needs a place to store the Terraform "state". We will create a secure, versioned Cloud Storage bucket for this.
 
 ### 1. Choose a Region
 Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 
 ### 2. Run the Creation Script
-The button below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
+The button below will generate a unique bucket name and prompt you for your preferred region.
 
-<walkthrough-cloud-shell-editor-button
-  command="export BUCKET_NAME=tf-state-{{project-id}}-$(cat /dev/urandom | tr -dc 'a-z0-4' | fold -w 6 | head -n 1); 
+<walkthrough-editor-button
+  terminalCommand="export BUCKET_NAME=tf-state-{{project-id}}-$(cat /dev/urandom | tr -dc 'a-z0-4' | fold -w 6 | head -n 1); 
            read -p 'Enter GCP Region (e.g. us-central1): ' REGION;
            gsutil mb -l $REGION gs://$BUCKET_NAME;
            gsutil versioning set on gs://$BUCKET_NAME;
@@ -51,7 +51,7 @@ The button below will generate a unique bucket name, prompt you for your preferr
            export TF_VAR_project_id={{project-id}};
            export TF_VAR_region=$REGION">
   Create State Bucket
-</walkthrough-cloud-shell-editor-button>
+</walkthrough-editor-button>
 
 > [!TIP]
 > This script also sets your `TF_VAR` environment variables so Infrastructure Manager knows which region to use for the rest of the install.
