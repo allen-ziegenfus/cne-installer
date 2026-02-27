@@ -10,9 +10,9 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/base-network'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=cloud/gcp/gke'
+      - '--git-source-directory=cloud/gcp/terraform/gke'
       - '--git-source-ref=master'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION}'
+      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
   # Step 2: Deploy the GKE/Cluster stack (Wait for Network)
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -25,9 +25,9 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gke-cluster'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=cloud/gcp/gitops/platform'
+      - '--git-source-directory=cloud/gcp/terraform/gitops/platform'
       - '--git-source-ref=master'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION}'
+      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
 options:
   logging: CLOUD_LOGGING_ONLY
