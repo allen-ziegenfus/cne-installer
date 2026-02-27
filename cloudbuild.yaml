@@ -1,22 +1,23 @@
 steps:
   # Step 0: Build Helm Dependencies
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  - name: 'alpine/helm:3.17.1'
     id: 'Build Helm Deps'
-    entrypoint: 'bash'
+    entrypoint: 'sh'
     args:
       - '-c'
       - |
         cd cloud/terraform/gcp/gke/helm/gateway-infra && helm dependency build
 
-  # Step 1: Security Scan (Checkov) - Scans Terraform for misconfigurations
+  # Step 1: Security Scan (Checkov)
   - name: 'bridgecrew/checkov:latest'
     id: 'Security Scan - Checkov'
     args:
-      - '--directory=.'
+      - '--directory=cloud/terraform'
+      - '--download-external-modules'
       - '--compact'
-      - '--soft-fail' # Change to remove this if you want to block on security failures
+      - '--soft-fail'
 
-  # Step 2: Security Scan (Trivy) - Scans for vulnerabilities
+  # Step 2: Security Scan (Trivy)
   - name: 'aquasec/trivy:latest'
     id: 'Security Scan - Trivy'
     entrypoint: 'trivy'
@@ -24,7 +25,7 @@ steps:
       - 'fs'
       - '.'
       - '--severity=HIGH,CRITICAL'
-      - '--exit-code=0' # Change to 1 if you want to block on security failures
+      - '--exit-code=0'
 
   # Step 3: Deploy the Network/Base stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -39,9 +40,10 @@ steps:
       - '--git-source-repo=${_REPO_URL}'
       - '--git-source-directory=cloud/terraform/gcp/gke'
       - '--git-source-ref=master'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET},authorized_ipv4_cidr_block=${_AUTH_NETWORKS},domains=${_DOMAINS},enable_cloudflare=${_ENABLE_CLOUDFLARE},cloudflare_account_id=${_CF_ACCOUNT},cloudflare_zone_id=${_CF_ZONE}'
+      - '--inputs-file=terraform.tfvars'
+      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
-  # Step 2: Deploy the GKE/Cluster stack (Wait for Network)
+  # Step 4: Deploy the GKE/Cluster stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     id: Gitops Platform
@@ -55,13 +57,8 @@ steps:
       - '--git-source-directory=cloud/terraform/gcp/gitops/platform'
       - '--git-source-ref=master'
       - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
+
 substitutions:
   _REGION: 'us-central1'
   _REPO_URL: 'https://github.com/your-org/your-repo'
   _STATE_BUCKET: ''
-  _AUTH_NETWORKS: ''
-  _DOMAINS: '[]'
-  _ENABLE_CLOUDFLARE: 'false'
-  _CF_ACCOUNT: ''
-  _CF_ZONE: ''
-
