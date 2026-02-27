@@ -16,10 +16,9 @@ Before running the installer, you need to select the Google Cloud project where 
 
 Once selected, click the button below to sync your terminal environment:
 
-<walkthrough-editor-button
-  terminalCommand="gcloud config set project {{project-id}}">
-  Confirm Project Selection
-</walkthrough-editor-button>
+```sh
+gcloud config set project {{project-id}}
+```
 
 ## Enable APIs
 The installer requires several Google Cloud APIs to be enabled to automate the creation and management of your environment. 
@@ -37,20 +36,13 @@ Infrastructure Manager needs a place to store the Terraform "state" (the record 
 Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 
 ### 2. Run the Creation Script
-The button below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
+The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
-<walkthrough-cloud-shell-snippet
-  terminalCommand="export BUCKET_NAME=tf-state-{{project-id}}-$(cat /dev/urandom | tr -dc 'a-z0-4' | fold -w 6 | head -n 1); 
-           read -p 'Enter GCP Region (e.g. us-central1): ' REGION;
-           gsutil mb -l $REGION gs://$BUCKET_NAME;
-           gsutil versioning set on gs://$BUCKET_NAME;
-           echo '------------------------------------';
-           echo 'BUCKET CREATED: '$BUCKET_NAME;
-           echo 'REGION SET TO: '$REGION;
-           echo '------------------------------------';
-           export TF_VAR_project_id={{project-id}};
-           export TF_VAR_region=$REGION">
-</walkthrough-cloud-shell-snippet>
+<walkthrough-editor-open-file filePath="create_tfstate_bucket.sh">View Script State</walkthrough-editor-open-file>
+
+```sh
+./create_tfstate_bucket.sh {{project-id}}
+```
 
 > [!TIP]
 > This script also sets your `TF_VAR` environment variables so Infrastructure Manager knows which region to use for the rest of the install.
