@@ -49,3 +49,20 @@ fi
 export TF_VAR_project_id="$PROJECT_ID"
 export TF_VAR_region="$REGION"
 export STATE_BUCKET="$BUCKET_NAME"
+
+# Update terraform.tfvars
+TFVARS_FILE="cloud/terraform/gcp/gke/terraform.tfvars"
+if [ -f "$TFVARS_FILE" ]; then
+    # Remove existing entries to avoid duplicates
+    sed -i '/project_id/d' "$TFVARS_FILE"
+    sed -i '/region/d' "$TFVARS_FILE"
+    sed -i '/state_bucket/d' "$TFVARS_FILE"
+
+    # Append new values
+    cat <<EOF >> "$TFVARS_FILE"
+project_id   = "$PROJECT_ID"
+region       = "$REGION"
+state_bucket = "$BUCKET_NAME"
+EOF
+    echo "Updated $TFVARS_FILE with automated settings."
+fi

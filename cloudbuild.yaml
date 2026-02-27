@@ -13,7 +13,7 @@ steps:
     id: 'Security Scan - Checkov'
     args:
       - '--directory=cloud/terraform'
-      - '--download-external-modules'
+      - '--download-external-modules=true'
       - '--compact'
       - '--soft-fail'
 
@@ -37,11 +37,8 @@ steps:
       - 'apply'
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gke-network'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
-      - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=cloud/terraform/gcp/gke'
-      - '--git-source-ref=master'
+      - '--local-source=cloud/terraform/gcp/gke'
       - '--inputs-file=terraform.tfvars'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
   # Step 4: Deploy the GKE/Cluster stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -53,10 +50,8 @@ steps:
       - 'apply'
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gitops-platform'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
-      - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=cloud/terraform/gcp/gitops/platform'
-      - '--git-source-ref=master'
-      - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
+      - '--local-source=cloud/terraform/gcp/gitops/platform'
+      - '--inputs-file=../../../gke/terraform.tfvars'
 
 substitutions:
   _REGION: 'us-central1'
