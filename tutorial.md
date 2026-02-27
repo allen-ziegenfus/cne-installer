@@ -29,24 +29,17 @@ The installer requires several Google Cloud APIs to be enabled to automate the c
 <walkthrough-enable-apis apis="cloudbuild.googleapis.com,config.googleapis.com,compute.googleapis.com,container.googleapis.com,cloudresourcemanager.googleapis.com,iam.googleapis.com,iamcredentials.googleapis.com,sts.googleapis.com,storage-api.googleapis.com,artifactregistry.googleapis.com,sqladmin.googleapis.com,secretmanager.googleapis.com,servicenetworking.googleapis.com,servicemanagement.googleapis.com,servicecontrol.googleapis.com">
 </walkthrough-enable-apis>
 
-## Create Terraform State Bucket
-Infrastructure Manager needs a place to store the Terraform "state" (the record of what has been built). We will create a secure, versioned Cloud Storage bucket for this.
+## Configure Region
+Choose the Google Cloud region where you want to deploy your infrastructure.
 
-### 1. Choose a Region
-Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
-
-### 2. Run the Creation Script
-The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
-
-<walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View create_tfstate_bucket.sh</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="./setup-region.sh">View setup-region.sh</walkthrough-editor-open-file>
 
 ```sh
-source ./create_tfstate_bucket.sh <walkthrough-project-id/>
+source ./setup-region.sh <walkthrough-project-id/>
 ```
 
 > [!IMPORTANT]
-> We use `source` to ensure the bucket name and region are saved as environment variables in your current session for the next steps.
-> You can verify the bucket in the [Cloud Storage Browser](https://console.cloud.google.com/storage/browser?project=<walkthrough-project-id/>).
+> We use `source` to ensure the region is saved as an environment variable in your current session. This script also updates your `terraform.tfvars` file automatically.
 
 ## Create Service Accounts
 To run the terraform scripts with Infrastructure Manager and Cloud Build we need to create a service account and permissions for the cloud build runner. 
@@ -86,7 +79,7 @@ You can copy/paste these examples into the file:
     ```
 
 > [!TIP]
-> **Why edit the file?** Editing `terraform.tfvars` makes your settings "permanent" for the life of this project. Any settings you provide in the file will be used during the build. Essential settings (Project ID, Region, State Bucket) are automatically handled by the installer.
+> **Why edit the file?** Editing `terraform.tfvars` makes your settings "permanent" for the life of this project. Any settings you provide in the file will be used during the build. Essential settings (Project ID, Region) are automatically handled by the installer.
 
 ## Kick off the build
 Now we can invoke Cloud Build and Infrastructure Manager to actually run the build!

@@ -50,12 +50,6 @@ variable "authorized_ipv4_cidr_block" {
 }
 
 
-variable "state_bucket" {
-  description = "The GCS bucket for Terraform state"
-  type        = string
-  default     = ""
-}
-
 variable "networking_mode" {
   description = "Set to 'ingress' for legacy NGINX or 'gateway' for modern Envoy"
   type        = string
