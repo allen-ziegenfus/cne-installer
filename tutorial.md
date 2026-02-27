@@ -81,7 +81,7 @@ The script below will actually invoke the terraform build
 Once the build is submitted, you can track its progress and view logs in the Google Cloud Console.
 
 *   [View Build History in Console](https://console.cloud.google.com/cloud-build/builds?project=<walkthrough-project-id/>)
-*   [View Infrastructure Manager Deployments](https://console.cloud.google.com/google/artifacts/deployments?project=<walkthrough-project-id/>)
+*   [View Infrastructure Manager Deployments](https://console.cloud.google.com/infrastructure-manager/deployments?project=<walkthrough-project-id/>)
 
 ## Verify the Cluster
 After the Infrastructure Manager deployment finishes, your GKE cluster will be ready.

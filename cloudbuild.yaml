@@ -10,9 +10,8 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gke-network'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=.'
+      - '--git-source-directory=cloud/terraform/gcp/gke'
       - '--git-source-ref=master'
-      - '--config-path=cloud/terraform/gcp/gke'
       - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
   # Step 2: Deploy the GKE/Cluster stack (Wait for Network)
@@ -26,14 +25,11 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gitops-platform'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--git-source-repo=${_REPO_URL}'
-      - '--git-source-directory=.'
+      - '--git-source-directory=cloud/terraform/gcp/gitops/platform'
       - '--git-source-ref=master'
-      - '--config-path=cloud/terraform/gcp/gitops/platform'
       - '--input-values=project_id=${PROJECT_ID},region=${_REGION},state_bucket=${_STATE_BUCKET}'
 
 
-options:
-  logging: CLOUD_LOGGING_ONLY
 
 substitutions:
   _REGION: 'us-central1'

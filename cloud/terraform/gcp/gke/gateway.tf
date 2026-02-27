@@ -1,13 +1,13 @@
 resource "helm_release" "gateway_crds" {
   name             = "gateway-crds"
-  chart            = "${path.module}/../../../helm/gateway-crds"
+  chart            = "${path.module}/helm/gateway-crds"
   namespace        = "infra"
   version          = "1.0.0"
 }
 
 resource "helm_release" "gateway_infra" {
   name             = "gateway-infra"
-  chart            = "${path.module}/../../../helm/gateway-infra"
+  chart            = "${path.module}/helm/gateway-infra"
   namespace        = "infra"
   create_namespace = true
   version          = "1.0.2"
