@@ -55,5 +55,3 @@ steps:
 
 substitutions:
   _REGION: 'us-central1'
-  _REPO_URL: 'https://github.com/your-org/your-repo'
-  _STATE_BUCKET: ''
