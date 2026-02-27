@@ -46,6 +46,7 @@ The script below will generate a unique bucket name, prompt you for your preferr
 
 > [!TIP]
 > This script also sets your `TF_VAR` environment variables so Infrastructure Manager knows which region to use for the rest of the install.
+> You can verify the bucket in the [Cloud Storage Browser](https://console.cloud.google.com/storage/browser?project=<walkthrough-project-id/>).
 
 ## Create Service Accounts
 To run the terraform scripts with Infrastructure Manager and Cloud Build we need to create a service account and permissions for the cloud build runner. 
@@ -58,6 +59,9 @@ The script below will generate a service account and allow Cloud Build to run wi
 ```sh
 ./setup-iam.sh <walkthrough-project-id/>
 ```
+
+> [!TIP]
+> You can verify the created service account and its permissions in the [IAM Service Accounts Console](https://console.cloud.google.com/iam-admin/serviceaccounts?project=<walkthrough-project-id/>).
 
 ## Kick off the build
 Now we can invoke Cloud Build and Infrastructure Manager to actually run the build!
