@@ -66,6 +66,8 @@ Now we can invoke Cloud Build and Infrastructure Manager to actually run the bui
 The script below will actually invoke the terraform build
 
 <walkthrough-editor-open-file filePath="./submit_build.sh">View submit_build.sh</walkthrough-editor-open-file>
+<walkthrough-editor-open-file filePath="./cloudbuild.yaml">View cloudbuild.yaml</walkthrough-editor-open-file>
+
 
 ```sh
 ./submit_build.sh <walkthrough-project-id/>
