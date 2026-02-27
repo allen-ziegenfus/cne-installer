@@ -14,7 +14,7 @@ if [ -z "$TF_VAR_region" ]; then
     # Try to find the region from an existing state bucket
     EXISTING_BUCKET=$(gcloud storage buckets list --project="$PROJECT_ID" --format="value(name)" --filter="name ~ ^tf-state-${PROJECT_ID}-" | head -n 1)
     if [ -n "$EXISTING_BUCKET" ]; then
-        TF_VAR_region=$(gcloud storage buckets describe "gs://$EXISTING_BUCKET" --format="value(location)")
+        TF_VAR_region=$(gcloud storage buckets describe "gs://$EXISTING_BUCKET" --format="value(location)" | tr '[:upper:]' '[:lower:]')
         STATE_BUCKET="$EXISTING_BUCKET"
         echo "Detected Region: $TF_VAR_region"
         echo "Detected Bucket: $STATE_BUCKET"
@@ -40,4 +40,5 @@ echo "------------------------------------"
 
 gcloud beta builds submit . \
     --config=cloudbuild.yaml \
-    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET"
+    --substitutions=_REGION="$TF_VAR_region",_REPO_URL="$REPO_URL",_STATE_BUCKET="$STATE_BUCKET" \
+    --stream

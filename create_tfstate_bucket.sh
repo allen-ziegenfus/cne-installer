@@ -15,8 +15,8 @@ if [ -n "$EXISTING_BUCKET" ]; then
     echo "------------------------------------"
     echo "FOUND EXISTING BUCKET: $EXISTING_BUCKET"
     
-    # Extract region of existing bucket
-    REGION=$(gcloud storage buckets describe "gs://$EXISTING_BUCKET" --format="value(location)")
+    # Extract region of existing bucket and force to lowercase
+    REGION=$(gcloud storage buckets describe "gs://$EXISTING_BUCKET" --format="value(location)" | tr '[:upper:]' '[:lower:]')
     echo "REGION DETECTED: $REGION"
     echo "------------------------------------"
     BUCKET_NAME="$EXISTING_BUCKET"
