@@ -44,8 +44,9 @@ variable "ecr_repositories" {
 }
 
 variable "authorized_ipv4_cidr_block" {
-  description = "The CIDR block for GKE Master Authorized Networks"
+  description = "The CIDR block for GKE Master Authorized Networks. If empty, authorized networks will be disabled."
   type        = string
+  default     = ""
 }
 
 
@@ -56,8 +57,9 @@ variable "networking_mode" {
 }
 
 variable "domains" {
-  description = "List of root domains to support"
+  description = "List of root domains to support. If empty, the cluster will be created without custom domain routing."
   type        = list(string)
+  default     = []
 }
 
 variable "enable_cloudflare" {

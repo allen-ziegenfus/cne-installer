@@ -38,7 +38,14 @@ Common regions include `us-central1`, `europe-west1`, or `asia-east1`.
 > [!NOTE]
 > **Cloudflare Integration:** By default, Cloudflare Zero Trust Tunnel is **disabled**. If you wish to enable it, you must set `enable_cloudflare = true` and provide your `cloudflare_account_id` and `cloudflare_zone_id` in your Terraform variables.
 
+> [!TIP]
+> **Securing Kubernetes Access:** By default, the GKE API is accessible to any authenticated user. To restrict access to only your specific IP address, set the `authorized_ipv4_cidr_block` variable to your public IP (e.g., `1.2.3.4/32`).
+
+> [!TIP]
+> **Custom Domains:** The `domains` variable is **optional**. If you don't provide any domains, the installer will set up the infrastructure without custom routing, and you can add domains later.
+
 ### 2. Run the Creation Script
+
 The script below will generate a unique bucket name, prompt you for your preferred region, and create the bucket with **versioning enabled**.
 
 <walkthrough-editor-open-file filePath="./create_tfstate_bucket.sh">View create_tfstate_bucket.sh</walkthrough-editor-open-file>
