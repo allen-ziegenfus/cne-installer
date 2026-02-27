@@ -38,7 +38,7 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gke-network'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--local-source=cloud/terraform/gcp/gke'
-      - '--inputs-file=terraform.tfvars'
+      - '--inputs-file=cloud/terraform/gcp/gke/terraform.tfvars'
 
   # Step 4: Deploy the GKE/Cluster stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
