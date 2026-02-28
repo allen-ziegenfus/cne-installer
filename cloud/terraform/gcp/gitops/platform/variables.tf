@@ -1,3 +1,17 @@
+variable "deployment_name" {
+  type    = string
+  default = "liferay-gcp"
+}
+
+variable "region" {
+  type    = string
+  default = "us-central1"
+}
+
+variable "project_id" {
+  type = string
+}
+
 variable "argocd_namespace" {
   default = "argocd"
   type    = string
