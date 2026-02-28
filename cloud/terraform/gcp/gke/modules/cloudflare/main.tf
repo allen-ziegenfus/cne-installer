@@ -41,25 +41,23 @@ resource "cloudflare_zero_trust_tunnel_cloudflared_config" "gke_tunnel_config" {
 
 # 5. DNS Records
 resource "cloudflare_dns_record" "root_dns" {
-  for_each        = toset(var.domains)
-  zone_id         = var.cloudflare_zone_id
-  name            = each.value
-  type            = "CNAME"
-  content         = "${cloudflare_zero_trust_tunnel_cloudflared.gke_tunnel.id}.cfargotunnel.com"
-  proxied         = true
-  ttl             = 1
-  allow_overwrite = true
+  for_each = toset(var.domains)
+  zone_id  = var.cloudflare_zone_id
+  name     = each.value
+  type     = "CNAME"
+  content  = "${cloudflare_zero_trust_tunnel_cloudflared.gke_tunnel.id}.cfargotunnel.com"
+  proxied  = true
+  ttl      = 1
 }
 
 resource "cloudflare_dns_record" "wildcard_dns" {
-  for_each        = toset(var.domains)
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.${each.value}"
-  type            = "CNAME"
-  content         = "${cloudflare_zero_trust_tunnel_cloudflared.gke_tunnel.id}.cfargotunnel.com"
-  proxied         = true
-  ttl             = 1
-  allow_overwrite = true
+  for_each = toset(var.domains)
+  zone_id  = var.cloudflare_zone_id
+  name     = "*.${each.value}"
+  type     = "CNAME"
+  content  = "${cloudflare_zero_trust_tunnel_cloudflared.gke_tunnel.id}.cfargotunnel.com"
+  proxied  = true
+  ttl      = 1
 }
 
 # 7. Deploy the Tunnel Agent
