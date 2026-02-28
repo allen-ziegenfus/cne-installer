@@ -10,6 +10,9 @@
 # Example: ["example.com", "myportal.io"]
 # domains = []
 
+# GitOps Repository: The URL of your own GitOps repository (created from the template).
+# liferay_git_repo_url = "https://github.com/your-org/your-gitops-repo"
+
 # ArgoCD Domain: Specifically for accessing the ArgoCD UI.
 # argocd_domain = "argocd.example.com"
 

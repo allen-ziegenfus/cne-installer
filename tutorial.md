@@ -64,6 +64,9 @@ Click the link below to create a new repository in your GitHub account using the
 
 [Create Repository from Template](https://github.com/LiferayCloud/cloud-native-gitops-boilerplate/generate)
 
+> [!IMPORTANT]
+> Once created, copy your repository URL and add it to the `liferay_git_repo_url` variable in your `terraform.tfvars` file.
+
 ### 2. Configure GitHub App
 To allow ArgoCD to sync from your new repository and provide SSO for your team, create a GitHub App:
 

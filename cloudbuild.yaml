@@ -17,7 +17,7 @@ steps:
       - '--compact'
       - '--soft-fail'
 
-  # Step23: Security Scan (Trivy)
+  # Step 2: Security Scan (Trivy)
   - name: 'aquasec/trivy:latest'
     id: 'Security Scan - Trivy'
     entrypoint: 'trivy'
@@ -53,7 +53,7 @@ steps:
       - '--local-source=cloud/terraform/gcp/gke'
       - '--inputs-file=terraform.tfvars'
 
-  # Step 5: Deploy the GKE/Cluster stack
+  # Step 5: Deploy the Gitops Platform stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     id: Gitops Platform
@@ -64,6 +64,19 @@ steps:
       - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gitops-platform'
       - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
       - '--local-source=cloud/terraform/gcp/gitops/platform'
+      - '--inputs-file=terraform.tfvars'
+
+  # Step 7: Deploy GitOps Resources
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    id: Gitops Resources
+    args:
+      - 'infra-manager'
+      - 'deployments'
+      - 'apply'
+      - 'projects/${PROJECT_ID}/locations/${_REGION}/deployments/gitops-resources'
+      - '--service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com'
+      - '--local-source=cloud/terraform/gcp/gitops/resources'
       - '--inputs-file=terraform.tfvars'
 
 substitutions:
