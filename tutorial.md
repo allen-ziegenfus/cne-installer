@@ -122,7 +122,11 @@ Some features require secrets to be stored in Google Secret Manager before deplo
     ./setup-github-app-secret.sh <walkthrough-project-id/>
     ```
     > [!TIP]
-    > This script will prompt you for the App ID, Installation ID, and Private Key, and handle the JSON formatting for you.
+    > **How to find your Installation ID:**
+    > 1. Go to your **Repository Settings** (the tab at the top of your repo).
+    > 2. Click **GitHub Apps** in the left sidebar.
+    > 3. Click **Configure** next to your app.
+    > 4. The **Installation ID** is the number at the end of the URL: `.../installations/12345678`.
 
 *   **Cloudflare Integration:**
     To use Cloudflare, store your API Token in Secret Manager:
