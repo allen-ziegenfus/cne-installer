@@ -11,7 +11,13 @@
 # domains = []
 
 # GitOps Repository: The URL of your own GitOps repository (created from the template).
-# liferay_git_repo_url = "https://github.com/your-org/your-gitops-repo"
+liferay_git_repo_url = ""
+
+# GitOps Auth Method: 'https' (default), 'ssh', or 'github_app'.
+# liferay_git_repo_auth_method = "https"
+
+# Root Domain: The primary domain for your Liferay deployment.
+root_domain = ""
 
 # ArgoCD Domain: Specifically for accessing the ArgoCD UI.
 # argocd_domain = "argocd.example.com"
@@ -44,3 +50,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # project_id   = ""
 # region       = ""
+# liferay_helm_chart_version = ""
+# github_workload_identity_pool_id = ""

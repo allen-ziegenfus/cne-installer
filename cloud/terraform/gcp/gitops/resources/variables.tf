@@ -31,6 +31,9 @@ variable "infrastructure_git_repo_config" {
         ssh_private_key_vault_secret_property = optional(string, "git_ssh_private_key")
         token_vault_secret_property           = optional(string, "git_access_token")
         username_vault_secret_property        = optional(string, "git_machine_user_id")
+        github_app_id_vault_secret_property   = optional(string, "github_app_id")
+        github_app_install_id_vault_secret_property = optional(string, "github_app_installation_id")
+        github_app_key_vault_secret_property  = optional(string, "github_app_private_key")
         // no slashes allowed
         vault_secret_name = optional(string, "liferay-cloud-native-gitops-repo-credentials")
       })
@@ -51,8 +54,8 @@ variable "infrastructure_git_repo_config" {
   validation {
     condition = (
       !contains(keys(var.infrastructure_git_repo_config.auth), "method") ||
-    contains(["https", "ssh"], var.infrastructure_git_repo_config.auth.method))
-    error_message = "The 'infrastructure_git_repo_auth_config.method' value must be 'https' or 'ssh'."
+    contains(["https", "ssh", "github_app"], var.infrastructure_git_repo_config.auth.method))
+    error_message = "The 'infrastructure_git_repo_auth_config.method' value must be 'https', 'ssh', or 'github_app'."
   }
 }
 
@@ -102,6 +105,9 @@ variable "liferay_git_repo_config" {
         ssh_private_key_vault_secret_property = optional(string, "git_ssh_private_key")
         token_vault_secret_property           = optional(string, "git_access_token")
         username_vault_secret_property        = optional(string, "git_machine_user_id")
+        github_app_id_vault_secret_property   = optional(string, "github_app_id")
+        github_app_install_id_vault_secret_property = optional(string, "github_app_installation_id")
+        github_app_key_vault_secret_property  = optional(string, "github_app_private_key")
         // No slashes allowed
         vault_secret_name = optional(string, "liferay-cloud-native-gitops-repo-credentials")
       })
@@ -121,8 +127,8 @@ variable "liferay_git_repo_config" {
   validation {
     condition = (
       !contains(keys(var.liferay_git_repo_config.auth), "method") ||
-    contains(["https", "ssh"], var.liferay_git_repo_config.auth.method))
-    error_message = "The 'liferay_git_repo_auth_config.method' value must be 'https' or 'ssh'."
+    contains(["https", "ssh", "github_app"], var.liferay_git_repo_config.auth.method))
+    error_message = "The 'liferay_git_repo_auth_config.method' value must be 'https', 'ssh', or 'github_app'."
   }
 }
 variable "liferay_git_repo_url" {

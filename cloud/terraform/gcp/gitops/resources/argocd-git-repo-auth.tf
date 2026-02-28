@@ -43,6 +43,29 @@ resource "kubernetes_manifest" "git_repo_credentials_external_secret" {
               secretKey = "ssh_private_key"
             },
           ] : [],
+          each.value.method == "github_app" ? [
+            {
+              remoteRef = {
+                key      = each.value.vault_secret_name
+                property = each.value.github_app_id_vault_secret_property
+              }
+              secretKey = "github_app_id"
+            },
+            {
+              remoteRef = {
+                key      = each.value.vault_secret_name
+                property = each.value.github_app_install_id_vault_secret_property
+              }
+              secretKey = "github_app_installation_id"
+            },
+            {
+              remoteRef = {
+                key      = each.value.vault_secret_name
+                property = each.value.github_app_key_vault_secret_property
+              }
+              secretKey = "github_app_private_key"
+            },
+          ] : [],
       ])
       refreshInterval = "1h0m0s"
       secretStoreRef = {
@@ -65,7 +88,12 @@ resource "kubernetes_manifest" "git_repo_credentials_external_secret" {
             } : {},
             each.value.method == "ssh" ? {
               sshPrivateKey = "{{ .ssh_private_key }}"
-          } : {})
+            } : {},
+            each.value.method == "github_app" ? {
+              githubAppID         = "{{ .github_app_id }}"
+              githubAppInstallationID = "{{ .github_app_installation_id }}"
+              githubAppPrivateKey = "{{ .github_app_private_key }}"
+            } : {})
           metadata = {
             labels = merge(
               local.common_labels,

@@ -99,6 +99,31 @@ Some features require secrets to be stored in Google Secret Manager before deplo
     ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-liferay-license-xml path/to/your/license.xml
     ```
 
+*   **GitOps Repository Credentials:** (Mandatory for GitOps)
+    Store your GitHub credentials so ArgoCD can sync with your repository. Choose **one** method:
+
+    **A. HTTPS (Default):**
+    Provide a JSON string containing `git_access_token` and `git_machine_user_id`.
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-gitops-repo-credentials
+    ```
+
+    **B. SSH:**
+    Provide the `git_ssh_private_key`. Set `liferay_git_repo_auth_method = "ssh"` in `terraform.tfvars`.
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-gitops-repo-credentials
+    ```
+
+    **C. GitHub App:**
+    Use this method if you want ArgoCD to use short-lived tokens. 
+    1. Set `liferay_git_repo_auth_method = "github_app"` in `terraform.tfvars`.
+    2. Run the helper script to format and store the secret:
+    ```sh
+    ./setup-github-app-secret.sh <walkthrough-project-id/>
+    ```
+    > [!TIP]
+    > This script will prompt you for the App ID, Installation ID, and Private Key, and handle the JSON formatting for you.
+
 *   **Cloudflare Integration:**
     To use Cloudflare, store your API Token in Secret Manager:
     ```sh
@@ -117,6 +142,9 @@ Some features require secrets to be stored in Google Secret Manager before deplo
 Click the button below to open the variables file in the editor:
 
 <walkthrough-editor-open-file filePath="terraform.tfvars">Open terraform.tfvars</walkthrough-editor-open-file>
+
+> [!IMPORTANT]
+> You **must** provide values for `liferay_git_repo_url` and `root_domain` in the file before starting the build.
 
 ### Common Settings
 You can copy/paste these examples into the file:
