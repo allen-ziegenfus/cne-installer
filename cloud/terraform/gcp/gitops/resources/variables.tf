@@ -64,8 +64,8 @@ variable "liferay_gcp_helm_chart_config" {
   type = object(
     {
       image_name = optional(string, "liferay-gcp")
-      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/liferay-artifact-registry/liferay-helm-chart/liferay-gcp")
-      version    = optional(string, "0.1.3")
+      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/gcp-liferay/gcp-liferay-registry")
+      version    = optional(string, "0.1.5")
       path       = optional(string)
   })
 }
@@ -75,7 +75,7 @@ variable "infrastructure_helm_chart_config" {
   type = object(
     {
       image_name = optional(string, "liferay-gcp-infrastructure")
-      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/external-assets-prd/liferay-helm-chart/liferay-gcp-infrastructure")
+      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/gcp-liferay/gcp-liferay-registry")
       version    = optional(string, "0.1.3")
       path       = optional(string)
   })
@@ -85,7 +85,7 @@ variable "infrastructure_provider_helm_chart_config" {
   type = object(
     {
       image_name = optional(string, "liferay-gcp-infrastructure-provider")
-      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/external-assets-prd/liferay-helm-chart/liferay-gcp-infrastructure-provider")
+      image_url  = optional(string, "oci://us-central1-docker.pkg.dev/gcp-liferay/gcp-liferay-registry")
       version    = optional(string, "0.1.3")
       path       = optional(string)
   })
