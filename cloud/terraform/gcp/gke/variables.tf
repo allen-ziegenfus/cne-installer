@@ -68,6 +68,12 @@ variable "enable_cloudflare" {
   description = "Whether to enable Cloudflare Zero Trust Tunnel and DNS management"
 }
 
+variable "enable_netbird" {
+  type        = bool
+  default     = false
+  description = "Whether to enable NetBird Reverse Proxy"
+}
+
 variable "cloudflare_account_id" {
   type      = string
   default   = ""

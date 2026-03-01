@@ -134,6 +134,14 @@ Some features require secrets to be stored in Google Secret Manager before deplo
     ./setup-secret.sh <walkthrough-project-id/> cloudflare-api-token
     ```
 
+*   **NetBird Integration:**
+    To use NetBird Reverse Proxy, store your Proxy Token in Secret Manager:
+    ```sh
+    ./setup-secret.sh <walkthrough-project-id/> netbird-proxy-token
+    ```
+    > [!TIP]
+    > Set `enable_netbird = true` in `terraform.tfvars`. You can generate a Proxy Token in the NetBird Dashboard under **Reverse Proxy > Proxy Tokens**.
+
 *   **GitHub SSO/GitOps Secrets:**
     If you plan to use GitHub for ArgoCD authentication or Webhooks, store these secrets:
     ```sh

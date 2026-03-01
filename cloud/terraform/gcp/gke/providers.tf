@@ -9,6 +9,12 @@ data "google_secret_manager_secret_version" "cloudflare_api_token" {
   project = var.project_id
 }
 
+data "google_secret_manager_secret_version" "netbird_proxy_token" {
+  count   = var.enable_netbird ? 1 : 0
+  secret  = "netbird-proxy-token"
+  project = var.project_id
+}
+
 # 2. Configure the Cloudflare Provider using that token
 provider "cloudflare" {
   # The provider requires a valid format even if not used. 

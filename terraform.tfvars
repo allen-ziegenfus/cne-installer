@@ -44,6 +44,9 @@ root_domain = ""
 # cloudflare_account_id = ""
 # cloudflare_zone_id    = ""
 
+# NetBird Integration: Enable NetBird Reverse Proxy.
+# enable_netbird = false
+
 # ---------------------------------------------------------------------------------------------------------------------
 # AUTOMATED SETTINGS
 # (Do not edit these manually; they are handled by the installer)
