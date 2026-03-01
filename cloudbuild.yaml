@@ -60,10 +60,10 @@ steps:
 
         echo "DEBUG: Extracted REGION: '$$REGION'"
         echo "DEBUG: Extracted DEPLOYMENT_NAME: '$$DEPLOYMENT_NAME'"
-        echo "DEBUG: PROJECT_ID: '$$PROJECT_ID'"
+        echo "DEBUG: PROJECT_ID: '${PROJECT_ID}'"
 
         GAR_REPO="$$DEPLOYMENT_NAME-registry"
-        GAR_REPO_URL="$$REGION-docker.pkg.dev/$$PROJECT_ID/$$GAR_REPO"
+        GAR_REPO_URL="$$REGION-docker.pkg.dev/${PROJECT_ID}/$$GAR_REPO"
         
         echo "Pushing charts to $$GAR_REPO_URL"
         
@@ -87,7 +87,7 @@ steps:
           CHART_VERSION=$$(helm show chart "$$CHART_PATH_ARG" | grep '^version:' | cut -d' ' -f2)
           
           helm package "$$CHART_PATH_ARG"
-          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/$$PROJECT_ID/$$GAR_REPO"
+          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/${PROJECT_ID}/$$GAR_REPO"
           
           # Cleanup packaged file
           rm "$$CHART_NAME-$$CHART_VERSION.tgz"
