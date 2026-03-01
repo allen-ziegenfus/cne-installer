@@ -3,8 +3,6 @@ provider "google" {
   region  = var.region
 }
 
-data "google_client_config" "default" {}
-
 data "google_container_cluster" "primary" {
   name     = "${var.deployment_name}-gke"
   location = var.region
