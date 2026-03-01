@@ -1,15 +1,40 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>GitHub App Manifest Generator</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; line-height: 1.6; }
-        .field { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; }
-        input[type="text"] { width: 300px; padding: 5px; }
-        #manifest-preview { background: #f4f4f4; padding: 10px; border: 1px solid #ccc; white-space: pre-wrap; font-family: monospace; font-size: 12px; }
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 5px;
+        }
+
+        #manifest-preview {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
     </style>
 </head>
+
 <body>
     <h2>Create GitHub App Manifest</h2>
 
@@ -25,7 +50,8 @@
 
     <form id="manifest-form" method="post">
         <input type="hidden" name="manifest" id="manifest_input">
-        <input type="submit" value="Register GitHub App" style="padding: 10px 20px; background-color: #2ea44f; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        <input type="submit" value="Register GitHub App"
+            style="padding: 10px 20px; background-color: #2ea44f; color: white; border: none; border-radius: 6px; cursor: pointer;">
     </form>
 
     <h3>Manifest Preview:</h3>
@@ -35,7 +61,7 @@
         function updateManifest() {
             const org = document.getElementById("org_name").value;
             const url = document.getElementById("app_url").value;
-            
+
             // Update Form Action to point to the correct Org
             const form = document.getElementById("manifest-form");
             form.action = `https://github.com/organizations/${org}/settings/apps/new?state=abc123`;
@@ -47,21 +73,25 @@
                 "callback_urls": [`${url}/api/dex/callback`],
                 "redirect_url": `${url}/auth-setup-success`,
                 "public": false,
-                "webhook_active": true, 
-                "webhook_url": `${url}/api/webhook`,
+                "hook_attributes": {
+                    "url": `${url}/api/webhook`,
+                    "active": true
+                },
                 "default_permissions": {
                     "members": "read",
                     "emails": "read",
-                    "metadata": "read"
+                    "metadata": "read",
+                    "contents": "read"
                 },
                 "default_events": [
+                    "push",
                     "membership",
                     "organization"
                 ]
             };
 
             const jsonString = JSON.stringify(manifest, null, 2);
-            
+
             // Set values for the hidden input and the visual preview
             document.getElementById("manifest_input").value = JSON.stringify(manifest);
             document.getElementById("manifest-preview").textContent = jsonString;
@@ -71,4 +101,5 @@
         updateManifest();
     </script>
 </body>
+
 </html>
