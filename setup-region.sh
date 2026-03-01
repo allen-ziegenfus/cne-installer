@@ -24,15 +24,11 @@ if [ -f "$TFVARS_FILE" ]; then
     # Remove existing entries to avoid duplicates
     sed -i '/project_id/d' "$TFVARS_FILE"
     sed -i '/region/d' "$TFVARS_FILE"
-    sed -i '/liferay_helm_chart_version/d' "$TFVARS_FILE"
-    sed -i '/github_workload_identity_pool_id/d' "$TFVARS_FILE"
     
     # Append new values
     cat <<EOF >> "$TFVARS_FILE"
 project_id   = "$PROJECT_ID"
 region       = "$REGION_NAME"
-liferay_helm_chart_version = "0.1.3"
-github_workload_identity_pool_id = "liferay-cloud-native-pool"
 EOF
     echo "------------------------------------"
     echo "SUCCESS: Region set to $REGION_NAME"
