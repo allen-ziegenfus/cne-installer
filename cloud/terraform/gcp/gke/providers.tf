@@ -1,5 +1,13 @@
 # Switches the provider to google and updates authentication for Helm/Kubernetes to use GKE.
 
+provider "google" {
+  project = var.project_id
+  region  = var.region
+  default_labels = {
+    deployment_name = var.deployment_name
+  }
+}
+
 data "google_client_config" "default" {}
 
 # 1. Fetch the API Token from GCP Secret Manager (if Cloudflare is enabled)
