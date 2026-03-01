@@ -40,6 +40,7 @@ steps:
       - '--local-source=cloud/terraform/gcp/gar'
       - '--inputs-file=terraform.tfvars'
 
+  # Step 4: Publish Helm Charts to GAR
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Publish Helm Charts'
     entrypoint: 'bash'
@@ -49,16 +50,20 @@ steps:
         # Install Helm
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-        # Extract region from terraform.tfvars or use substitution
-        # Use $$ for bash variables to prevent Cloud Build from attempting substitution
-        REGION=$$(grep 'region' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "${_REGION}")
-        [ -z "$$REGION" ] && REGION="${_REGION}"
+        # Extract values from terraform.tfvars or use defaults
+        # Using [[:space:]]* to handle leading whitespace/tabs
+        RAW_REGION=$$(grep -E '^[[:space:]]*region[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
+        REGION=$${RAW_REGION:-"${_REGION}"}
         
-        # Extract deployment_name from terraform.tfvars or use default
-        DEPLOYMENT_NAME=$$(grep 'deployment_name' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "liferay-gcp")
-        [ -z "$$DEPLOYMENT_NAME" ] && DEPLOYMENT_NAME="liferay-gcp"
+        RAW_DEPLOYMENT_NAME=$$(grep -E '^[[:space:]]*deployment_name[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
+        DEPLOYMENT_NAME=$${RAW_DEPLOYMENT_NAME:-"liferay-self-hosted"}
 
-        GAR_REPO_URL="$$REGION-docker.pkg.dev/${PROJECT_ID}/$$DEPLOYMENT_NAME-registry"
+        echo "DEBUG: Extracted REGION: '$$REGION'"
+        echo "DEBUG: Extracted DEPLOYMENT_NAME: '$$DEPLOYMENT_NAME'"
+        echo "DEBUG: PROJECT_ID: '$$PROJECT_ID'"
+
+        GAR_REPO="$$DEPLOYMENT_NAME-registry"
+        GAR_REPO_URL="$$REGION-docker.pkg.dev/$$PROJECT_ID/$$GAR_REPO"
         
         echo "Pushing charts to $$GAR_REPO_URL"
         
@@ -67,15 +72,28 @@ steps:
         
         # Helper to push a chart
         push_chart() {
-          CHART_PATH_ARG=$$1
+          CHART_PATH_ARG="$$1"
+          echo "---------------------------------------------------"
           echo "Packaging and pushing $$CHART_PATH_ARG..."
-          helm package "$$CHART_PATH_ARG"
+          
+          # Build dependencies if they exist
+          if [ -f "$$CHART_PATH_ARG/Chart.yaml" ]; then
+            echo "Building dependencies for $$CHART_PATH_ARG..."
+            helm dependency build "$$CHART_PATH_ARG"
+          fi
+
+          # Get chart name and version
           CHART_NAME=$$(helm show chart "$$CHART_PATH_ARG" | grep '^name:' | cut -d' ' -f2)
           CHART_VERSION=$$(helm show chart "$$CHART_PATH_ARG" | grep '^version:' | cut -d' ' -f2)
-          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/${PROJECT_ID}/$$DEPLOYMENT_NAME-registry"
+          
+          helm package "$$CHART_PATH_ARG"
+          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/$$PROJECT_ID/$$GAR_REPO"
+          
+          # Cleanup packaged file
+          rm "$$CHART_NAME-$$CHART_VERSION.tgz"
         }
         
-        # Push our charts
+        # Push our charts (Order matters for local dependencies)
         push_chart "cloud/helm/default"
         push_chart "cloud/helm/gcp"
         push_chart "cloud/helm/gcp-infrastructure"
