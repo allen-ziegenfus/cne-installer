@@ -40,7 +40,48 @@ steps:
       - '--local-source=cloud/terraform/gcp/gar'
       - '--inputs-file=terraform.tfvars'
 
-  # Step 4: Deploy the Network/Base stack
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    id: 'Publish Helm Charts'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Install Helm
+        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+        # Extract region from terraform.tfvars or use substitution
+        # Use $$ for bash variables to prevent Cloud Build from attempting substitution
+        REGION=$$(grep 'region' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "${_REGION}")
+        [ -z "$$REGION" ] && REGION="${_REGION}"
+        
+        # Extract deployment_name from terraform.tfvars or use default
+        DEPLOYMENT_NAME=$$(grep 'deployment_name' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "liferay-gcp")
+        [ -z "$$DEPLOYMENT_NAME" ] && DEPLOYMENT_NAME="liferay-gcp"
+
+        GAR_REPO_URL="$$REGION-docker.pkg.dev/${PROJECT_ID}/$$DEPLOYMENT_NAME-registry"
+        
+        echo "Pushing charts to $$GAR_REPO_URL"
+        
+        # Authenticate Helm with GAR
+        gcloud auth configure-docker "$$REGION-docker.pkg.dev" --quiet
+        
+        # Helper to push a chart
+        push_chart() {
+          CHART_PATH_ARG=$$1
+          echo "Packaging and pushing $$CHART_PATH_ARG..."
+          helm package "$$CHART_PATH_ARG"
+          CHART_NAME=$$(helm show chart "$$CHART_PATH_ARG" | grep '^name:' | cut -d' ' -f2)
+          CHART_VERSION=$$(helm show chart "$$CHART_PATH_ARG" | grep '^version:' | cut -d' ' -f2)
+          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/${PROJECT_ID}/$$DEPLOYMENT_NAME-registry"
+        }
+        
+        # Push our charts
+        push_chart "cloud/helm/default"
+        push_chart "cloud/helm/gcp"
+        push_chart "cloud/helm/gcp-infrastructure"
+        push_chart "cloud/helm/gcp-infrastructure-provider"
+
+  # Step 5: Deploy the Network/Base stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     id: 'Deploy GKE'
     entrypoint: 'gcloud'
@@ -53,7 +94,7 @@ steps:
       - '--local-source=cloud/terraform/gcp/gke'
       - '--inputs-file=terraform.tfvars'
 
-  # Step 5: Deploy the Gitops Platform stack
+  # Step 6: Deploy the Gitops Platform stack
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: 'gcloud'
     id: Gitops Platform
