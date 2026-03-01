@@ -15,12 +15,12 @@
 
     <div class="field">
         <label>GitHub Organization Name:</label>
-        <input type="text" id="org_name" value="Ziggy-AZ" oninput="updateManifest()">
+        <input type="text" id="org_name" value="Your Organization" oninput="updateManifest()">
     </div>
 
     <div class="field">
         <label>ArgoCD Base URL (no trailing slash):</label>
-        <input type="text" id="app_url" value="https://argocd.paastrial.xyz" oninput="updateManifest()">
+        <input type="text" id="app_url" value="https://yourargocd-domain.com" oninput="updateManifest()">
     </div>
 
     <form id="manifest-form" method="post">
@@ -47,6 +47,8 @@
                 "callback_urls": [`${url}/api/dex/callback`],
                 "redirect_url": `${url}/auth-setup-success`,
                 "public": false,
+                "webhook_active": true, 
+                "webhook_url": `${url}/api/webhook`,
                 "default_permissions": {
                     "members": "read",
                     "emails": "read",
