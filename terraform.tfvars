@@ -47,6 +47,9 @@ root_domain = ""
 # NetBird Integration: Enable NetBird Reverse Proxy.
 # enable_netbird = false
 
+# Artifact Registry Public Access (Optional)
+# enable_public_gar_access = false
+
 # ---------------------------------------------------------------------------------------------------------------------
 # AUTOMATED SETTINGS
 # (Do not edit these manually; they are handled by the installer)

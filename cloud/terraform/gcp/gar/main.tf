@@ -76,3 +76,13 @@ resource "google_artifact_registry_repository" "this" {
     }
   }
 }
+
+# 5. Make the repository public (Optional)
+resource "google_artifact_registry_repository_iam_member" "public_viewer" {
+  count      = var.enable_public_gar_access ? 1 : 0
+  project    = google_artifact_registry_repository.this.project
+  location   = google_artifact_registry_repository.this.location
+  repository = google_artifact_registry_repository.this.name
+  role       = "roles/artifactregistry.reader"
+  member     = "allUsers"
+}

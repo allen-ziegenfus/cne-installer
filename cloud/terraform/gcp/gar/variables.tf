@@ -24,3 +24,9 @@ variable "create_kms_key" {
   type        = bool
   default     = false
 }
+
+variable "enable_public_gar_access" {
+  description = "Whether to make the Artifact Registry repository public (allUsers)."
+  type        = bool
+  default     = false
+}
