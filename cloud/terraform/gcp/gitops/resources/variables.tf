@@ -134,6 +134,10 @@ variable "liferay_git_repo_config" {
 variable "liferay_git_repo_url" {
   type = string
 }
+variable "liferay_git_repo_auth_method" {
+  type    = string
+  default = "https"
+}
 variable "liferay_helm_chart_name" {
   default = "liferay-gcp"
   type    = string
