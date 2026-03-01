@@ -7,11 +7,15 @@ if [ -z "$PROJECT_ID" ]; then
     exit 1
 fi
 
+# Attempt to extract region from terraform.tfvars if not provided as an env var
 if [ -z "$REGION" ]; then
-    echo "Error: REGION environment variable is not set."
-    echo "Usage: REGION=us-central1 ./submit_build.sh <PROJECT_ID> [--step=<step-id>]"
-    exit 1
+    if [ -f "terraform.tfvars" ]; then
+        REGION=$(grep -E '^[[:space:]]*region[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' | xargs)
+    fi
 fi
+
+# Default to us-central1 if still not set
+REGION=${REGION:-"us-central1"}
 
 # Default to "all"
 ONLY_STEP="all"
