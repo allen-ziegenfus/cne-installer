@@ -15,3 +15,8 @@ data "google_compute_subnetwork" "private_subnet" {
   name   = "${var.deployment_name}-subnet"
   region = var.region
 }
+
+data "google_artifact_registry_repository" "liferay_registry" {
+  location      = var.region
+  repository_id = "${var.deployment_name}-registry"
+}

@@ -79,6 +79,14 @@ To allow ArgoCD to sync from your new repository and provide SSO for your team, 
 > [!TIP]
 > You will store these credentials securely in the next step using a helper script.
 
+### 3. (Optional) Prepare Workspace Repository
+If you have a separate Liferay Workspace repository for overlays and custom logic:
+1.  **Configure App Access**: Ensure the GitHub App you created in the previous step is also installed on this repository (or your entire organization).
+2.  **Update Variables**: Copy the repository URL (e.g., `my-org/liferay-workspace`) and add it to `liferay_workspace_git_repo_url` in `terraform.tfvars`.
+
+> [!NOTE]
+> **GitHub Actions & WIF**: Your Workspace repository will automatically be granted permissions to push images to the Artifact Registry and files to the Overlay bucket using **Workload Identity Federation (WIF)**. No manual keys are required in your GitHub Secrets.
+
 ## Optional: Advanced Configuration
 Before running the deployment, you can customize your environment by editing the Terraform variables file directly.
 
@@ -114,6 +122,11 @@ Some features require secrets to be stored in Google Secret Manager before deplo
     ```sh
     ./setup-github-app-secret.sh <walkthrough-project-id/>
     ```
+    > [!TIP]
+    > If you are using a separate Liferay Workspace repository with its own GitHub App or Installation ID, you can store a separate secret:
+    > ```sh
+    > ./setup-github-app-secret.sh <walkthrough-project-id/> liferay-workspace-repo-credentials
+    > ```
     > [!TIP]
     > **How to find your Installation ID:**
     > 1. Go to your **Repository Settings** (the tab at the top of your repo).

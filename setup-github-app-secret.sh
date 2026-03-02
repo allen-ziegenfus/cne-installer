@@ -1,13 +1,19 @@
 #!/bin/bash
 PROJECT_ID=$1
+SECRET_NAME=${2:-liferay-cloud-native-gitops-repo-credentials}
 
 if [ -z "$PROJECT_ID" ]; then
-    echo "Usage: ./setup-github-app-secret.sh <PROJECT_ID>"
+    echo "Usage: ./setup-github-app-secret.sh <PROJECT_ID> [SECRET_NAME]"
+    echo ""
+    echo "Examples:"
+    echo "  Default (GitOps Repo): ./setup-github-app-secret.sh my-project"
+    echo "  Workspace Repo:        ./setup-github-app-secret.sh my-project liferay-workspace-repo-credentials"
     exit 1
 fi
 
 echo "------------------------------------"
 echo "GitHub App Secret Generator"
+echo "Target Secret: $SECRET_NAME"
 echo "------------------------------------"
 
 read -p "Enter GitHub App ID: " APP_ID
@@ -38,7 +44,7 @@ echo "Generated github-app-credentials.json"
 echo "Uploading to Secret Manager..."
 echo "------------------------------------"
 
-./setup-secret.sh "$PROJECT_ID" liferay-cloud-native-gitops-repo-credentials github-app-credentials.json
+./setup-secret.sh "$PROJECT_ID" "$SECRET_NAME" github-app-credentials.json
 
 # Cleanup
 rm github-app-credentials.json

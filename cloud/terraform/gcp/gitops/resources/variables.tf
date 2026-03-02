@@ -136,6 +136,10 @@ variable "liferay_git_repo_config" {
 variable "liferay_git_repo_url" {
   type = string
 }
+variable "liferay_workspace_git_repo_url" {
+  type    = string
+  default = ""
+}
 variable "liferay_git_repo_auth_method" {
   type    = string
   default = "https"
@@ -163,6 +167,7 @@ variable "region" {
 variable "github_workload_identity_pool_id" {
   type        = string
   description = "The ID of the GitHub Workload Identity Pool"
+  default     = "github-pool"
 }
 
 variable "project_id" {

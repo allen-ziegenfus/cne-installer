@@ -25,6 +25,8 @@
 {{- $uidHash := printf "%s-%s" $env.projectNumber $projectIdFull | sha256sum | trunc 6 -}}
 {{- $baseName := printf "%.18s-%s" $projectIdFull $uidHash -}}
 
-{{- $githubPoolName := printf "projects/%s/locations/global/workloadIdentityPools/%s" ($env.projectNumber | toString) $env.githubWorkloadIdentityPoolId -}}
+{{- $githubPoolId := $env.githubWorkloadIdentityPoolId -}}
+{{- $githubPoolName := (contains "/" $githubPoolId) | ternary $githubPoolId (printf "projects/%s/locations/global/workloadIdentityPools/%s" ($env.projectNumber | toString) $githubPoolId) -}}
 
 {{- $overlay := $xr.spec.overlay | default dict -}}
+{{- $githubRepo := $overlay.githubRepo | default $env.liferayWorkspaceGitRepo -}}

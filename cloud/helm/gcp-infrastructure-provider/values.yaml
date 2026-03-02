@@ -2,6 +2,7 @@ gcp:
   projectId: ""
   clusterName: ""
   githubWorkloadIdentityPoolId: ""
+  liferayWorkspaceGitRepo: ""
   sqlGoogleServiceAccountEmail: ""
   storageGoogleServiceAccountEmail: ""
   computeGoogleServiceAccountEmail: ""

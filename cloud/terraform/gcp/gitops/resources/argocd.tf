@@ -237,6 +237,10 @@ resource "kubernetes_manifest" "infrastructure_provider_application" {
                 value = google_service_account.provider_gcp_storage_sa.email
               },
               {
+                name  = "gcp.liferayWorkspaceGitRepo"
+                value = var.liferay_workspace_git_repo_url
+              },
+              {
                 name  = "liferayServiceAccountRoleName"
                 value = local.liferay_service_account_role_name
               },

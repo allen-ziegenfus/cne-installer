@@ -33,7 +33,18 @@ locals {
           secret_store_provider_hcl = var.liferay_git_repo_config.auth.secret_store_provider_hcl == null ? local.git_repo_secret_store_provider_default : var.liferay_git_repo_config.auth.secret_store_provider_hcl
           url                       = var.liferay_git_repo_url
       })
-  })
+    },
+    var.liferay_workspace_git_repo_url != "" ? {
+      "workspace" = merge(
+        var.liferay_git_repo_config.auth,
+        {
+          method                    = var.liferay_git_repo_auth_method
+          secret_store_name         = "liferay-workspace-git-repo-credentials-vault"
+          secret_store_provider_hcl = var.liferay_git_repo_config.auth.secret_store_provider_hcl == null ? local.git_repo_secret_store_provider_default : var.liferay_git_repo_config.auth.secret_store_provider_hcl
+          url                       = var.liferay_workspace_git_repo_url
+      })
+    } : {}
+  )
   git_repo_infrastructure_separate_from_liferay = local.infrastructure_git_repo_url != var.liferay_git_repo_url
   git_repo_secret_store_provider_default = {
     gcpsm = {
@@ -73,4 +84,14 @@ locals {
   liferay_service_account_role_name = "${var.deployment_name}-gsa-role"
   oidc_provider                     = "${var.project_id}.svc.id.goog"
   terraform_manager_name            = "liferay-cloud-native-terraform"
+
+  # Extract repository paths (e.g., "org/repo") from URLs for WIF conditions
+  # This matches both https://github.com/org/repo and git@github.com:org/repo.git
+  git_repo_path_regex = "(?:github\\.com[:/])([^/]+/[^/.]+)(?:\\.git)?$"
+  
+  workspace_repo_path    = can(regex(local.git_repo_path_regex, var.liferay_workspace_git_repo_url)) ? regex(local.git_repo_path_regex, var.liferay_workspace_git_repo_url)[0] : var.liferay_workspace_git_repo_url != "" ? var.liferay_workspace_git_repo_url : null
+
+  allowed_github_repos = compact([
+    local.workspace_repo_path
+  ])
 }
