@@ -34,17 +34,7 @@ locals {
           secret_store_provider_hcl = var.liferay_git_repo_config.auth.secret_store_provider_hcl == null ? local.git_repo_secret_store_provider_default : var.liferay_git_repo_config.auth.secret_store_provider_hcl
           url                       = var.liferay_git_repo_url
       })
-    },
-    var.liferay_workspace_git_repo_url != "" ? {
-      "workspace" = merge(
-        var.liferay_git_repo_config.auth,
-        {
-          method                    = var.liferay_git_repo_auth_method
-          secret_store_name         = "liferay-workspace-git-repo-credentials-vault"
-          secret_store_provider_hcl = var.liferay_git_repo_config.auth.secret_store_provider_hcl == null ? local.git_repo_secret_store_provider_default : var.liferay_git_repo_config.auth.secret_store_provider_hcl
-          url                       = var.liferay_workspace_git_repo_url
-      })
-    } : {}
+    }
   )
   git_repo_infrastructure_separate_from_liferay = local.infrastructure_git_repo_url != var.liferay_git_repo_url
   git_repo_secret_store_provider_default = {

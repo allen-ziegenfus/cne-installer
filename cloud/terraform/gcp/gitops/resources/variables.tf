@@ -137,15 +137,12 @@ variable "liferay_git_repo_config" {
 variable "liferay_git_repo_url" {
   type = string
 }
-variable "liferay_workspace_git_repo_url" {
-  type    = string
-  default = ""
-}
 variable "liferay_workspace_git_repo_path" {
   type        = string
   default     = ""
-  description = "The GitHub repository path in 'owner/repo' format."
+  description = "The GitHub repository path in 'owner/repo' format (e.g. Ziggy-AZ/cne-workspace)."
 }
+
 variable "liferay_git_repo_auth_method" {
   type    = string
   default = "https"

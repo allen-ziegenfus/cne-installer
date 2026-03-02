@@ -22,7 +22,7 @@ data "google_artifact_registry_repository" "liferay_registry" {
 }
 
 data "google_secret_manager_secret_version" "github_app_creds" {
-  count   = var.liferay_workspace_git_repo_url != "" ? 1 : 0
+  count   = var.liferay_workspace_git_repo_path != "" ? 1 : 0
   secret  = var.liferay_git_repo_config.auth.vault_secret_name
   version = "latest"
 }

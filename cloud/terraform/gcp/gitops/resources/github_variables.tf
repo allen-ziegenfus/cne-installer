@@ -5,7 +5,7 @@
 # follows the Principle of Least Privilege by reducing the App's required permissions.
 
 locals {
-  workspace_vars = var.liferay_workspace_git_repo_url != "" ? {
+  workspace_vars = var.liferay_workspace_git_repo_path != "" ? {
     GCP_PROJECT_ID                 = var.project_id
     GCP_REGION                     = var.region
     GCP_WORKLOAD_IDENTITY_PROVIDER = google_iam_workload_identity_pool_provider.github.name

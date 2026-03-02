@@ -94,7 +94,7 @@ If you have a separate Liferay Workspace repository for overlays and custom logi
 4.  **Result**: The workflow will automatically install Liferay Blade, initialize the workspace, and add the GCP deployment logic for you.
 
 **C. Connect to GCP**
-1.  **Update Variables**: Copy your Workspace repository URL (e.g., `my-org/liferay-workspace`) and add it to `liferay_workspace_git_repo_url` in `terraform.tfvars`.
+1.  **Update Variables**: Copy your Workspace repository path (e.g., `my-org/liferay-workspace`) and add it to `liferay_workspace_git_repo_path` in `terraform.tfvars`.
 2.  **Configure App Access**: Ensure the GitHub App you created in the previous step is installed on this repository.
 
 > [!NOTE]

@@ -17,9 +17,9 @@
 # GitOps Repository: The URL of your own GitOps repository (created from the template).
 liferay_git_repo_url = ""
 
-# Liferay Workspace Repository: The URL of your separate workspace repo (for Overlay).
+# Liferay Workspace Repository: The path of your separate workspace repo (for Overlay).
 # Example: "my-org/liferay-workspace"
-liferay_workspace_git_repo_url = ""
+liferay_workspace_git_repo_path = ""
 
 # GitOps Auth Method: 'https' (default), 'ssh', or 'github_app'.
 # liferay_git_repo_auth_method = "https"
