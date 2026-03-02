@@ -1,5 +1,3 @@
-{{- $crossplaneNamespace := .Values.crossplaneNamespace | default "crossplane-system" -}}
-
 # 1. Runtime Config for the Kubernetes Provider
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
@@ -166,4 +164,9 @@ spec:
                     serviceAccountName: provider-gcp-cloudplatform
     serviceAccountTemplate:
         metadata:
+            annotations:
+                # This provider requires a full GSA to manage IAM policies and GSAs reliably.
+                # Otherwise all the IAM calls fail with a precondition check when using just a KSA: 
+                #    Caller must use first-party authentication in order to accept terms of service and use this API.
+                iam.gke.io/gcp-service-account: {{ printf "%s-cp-iam@%s.iam.gserviceaccount.com" .Values.deploymentName .Values.gcp.projectId }}
             name: provider-gcp-cloudplatform

@@ -1,35 +1,61 @@
 # ---------------------------------------------------------
-# 1. Direct IAM Bindings for Crossplane Kubernetes Service Accounts
+# 1. GSA for Cloud Platform Provider (Required for IAM management)
 # ---------------------------------------------------------
-# We grant permissions directly to the KSA principals using the 
-# Direct Workload Identity principal format.
-# ---------------------------------------------------------
+# Upbound's cloudplatform provider currently performs better with a 
+# dedicated GSA for high-privilege IAM and Service Account operations.
+
+resource "google_service_account" "cloudplatform_gsa" {
+  account_id   = "${var.deployment_name}-cp-iam"
+  display_name = "Crossplane Cloud Platform GSA (IAM Management)"
+  project      = var.project_id
+}
 
 locals {
-  # The principal format for direct KSA binding
+  cloudplatform_roles = [
+    "roles/iam.serviceAccountAdmin",
+    "roles/resourcemanager.projectIamAdmin",
+    "roles/iam.securityAdmin"
+  ]
+}
+
+resource "google_project_iam_member" "cloudplatform_roles" {
+  for_each = toset(local.cloudplatform_roles)
+  project  = var.project_id
+  role     = each.key
+  member   = "serviceAccount:${google_service_account.cloudplatform_gsa.email}"
+}
+
+resource "google_service_account_iam_member" "cloudplatform_wi_binding" {
+  service_account_id = google_service_account.cloudplatform_gsa.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.crossplane_namespace}/provider-gcp-cloudplatform]"
+}
+
+# ---------------------------------------------------------
+# 2. Direct IAM Bindings for other Crossplane Providers
+# ---------------------------------------------------------
+# SQL, Storage, and Compute use the leaner Direct KSA pattern.
+
+locals {
   ksa_principal_base = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${var.crossplane_namespace}/sa"
   
-  # List of KSAs we want to grant permissions to
-  provider_ksas = {
-    sql           = { role = "roles/cloudsql.admin", ksa = "provider-gcp-sql" }
-    compute       = { role = "roles/compute.admin",  ksa = "provider-gcp-compute" }
-    storage       = { role = "roles/storage.admin",  ksa = "provider-gcp-storage" }
-    cloudplatform = { role = "roles/iam.serviceAccountAdmin", ksa = "provider-gcp-cloudplatform" }
-    projectiam    = { role = "roles/resourcemanager.projectIamAdmin", ksa = "provider-gcp-cloudplatform" }
-    security      = { role = "roles/iam.securityAdmin", ksa = "provider-gcp-cloudplatform" }
+  direct_provider_ksas = {
+    sql     = "roles/cloudsql.admin"
+    compute = "roles/compute.admin"
+    storage = "roles/storage.admin"
   }
 }
 
 resource "google_project_iam_member" "provider_direct_iam" {
-  for_each = local.provider_ksas
+  for_each = local.direct_provider_ksas
 
   project = var.project_id
-  role    = each.value.role
-  member  = "${local.ksa_principal_base}/${each.value.ksa}"
+  role    = each.value
+  member  = "${local.ksa_principal_base}/provider-gcp-${each.key}"
 }
 
 # ---------------------------------------------------------
-# 2. Crossplane Functions (Standard)
+# 3. Crossplane Functions (Standard)
 # ---------------------------------------------------------
 resource "kubernetes_manifest" "function_auto_ready" {
   manifest = {
