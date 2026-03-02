@@ -68,7 +68,7 @@ steps:
         REGION=${RAW_REGION:-"${_REGION}"}
         
         RAW_DEPLOYMENT_NAME=$(grep -E '^[[:space:]]*deployment_name[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
-        DEPLOY_NAME=${RAW_DEPLOYMENT_NAME:-"liferay-self-hosted"}
+        DEPLOY_NAME=${RAW_DEPLOYMENT_NAME:-"liferay-gcp"}
 
         GAR_REPO="$${DEPLOY_NAME}-registry"
         gcloud auth configure-docker "$${REGION}-docker.pkg.dev" --quiet
