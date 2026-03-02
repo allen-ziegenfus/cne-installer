@@ -16,9 +16,7 @@ steps:
       - '-c'
       - |
         if [ "${_ONLY}" != "checkov" ] && [ "${_ONLY}" != "all" ]; then echo "Skipping..."; exit 0; fi
-        checkov --directory=. --download-external-modules=true --compact --soft-fail \
-          --skip-path cloud/terraform/gcp/gke/helm/gateway-infra \
-          --skip-framework secrets
+        checkov --directory=. --config-file=.checkov.yaml --download-external-modules=true --skip-framework secrets
     entrypoint: 'sh'
 
   # Step 2: Security Scan (Trivy)
@@ -55,25 +53,25 @@ steps:
         # Install Helm
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-        RAW_REGION=$$(grep -E '^[[:space:]]*region[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
-        REGION=$${RAW_REGION:-"${_REGION}"}
+        RAW_REGION=$(grep -E '^[[:space:]]*region[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
+        REGION=${RAW_REGION:-"${_REGION}"}
         
-        RAW_DEPLOYMENT_NAME=$$(grep -E '^[[:space:]]*deployment_name[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
-        DEPLOYMENT_NAME=$${RAW_DEPLOYMENT_NAME:-"liferay-self-hosted"}
+        RAW_DEPLOYMENT_NAME=$(grep -E '^[[:space:]]*deployment_name[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' || echo "")
+        DEPLOY_NAME=${RAW_DEPLOYMENT_NAME:-"liferay-self-hosted"}
 
-        GAR_REPO="$$DEPLOYMENT_NAME-registry"
-        gcloud auth configure-docker "$$REGION-docker.pkg.dev" --quiet
+        GAR_REPO="$${DEPLOY_NAME}-registry"
+        gcloud auth configure-docker "$${REGION}-docker.pkg.dev" --quiet
         
         push_chart() {
-          CHART_PATH_ARG="$$1"
-          if [ -f "$$CHART_PATH_ARG/Chart.yaml" ]; then
-            helm dependency build "$$CHART_PATH_ARG"
+          CHART_PATH_ARG="$1"
+          if [ -f "$CHART_PATH_ARG/Chart.yaml" ]; then
+            helm dependency build "$CHART_PATH_ARG"
           fi
-          CHART_NAME=$$(helm show chart "$$CHART_PATH_ARG" | grep '^name:' | cut -d' ' -f2)
-          CHART_VERSION=$$(helm show chart "$$CHART_PATH_ARG" | grep '^version:' | cut -d' ' -f2)
-          helm package "$$CHART_PATH_ARG"
-          helm push "$$CHART_NAME-$$CHART_VERSION.tgz" "oci://$$REGION-docker.pkg.dev/${PROJECT_ID}/$$GAR_REPO"
-          rm "$$CHART_NAME-$$CHART_VERSION.tgz"
+          CHART_NAME=$(helm show chart "$CHART_PATH_ARG" | grep '^name:' | cut -d' ' -f2)
+          CHART_VERSION=$(helm show chart "$CHART_PATH_ARG" | grep '^version:' | cut -d' ' -f2)
+          helm package "$CHART_PATH_ARG"
+          helm push "$CHART_NAME-$CHART_VERSION.tgz" "oci://$${REGION}-docker.pkg.dev/${PROJECT_ID}/$${GAR_REPO}"
+          rm "$CHART_NAME-$CHART_VERSION.tgz"
         }
         
         push_chart "cloud/helm/default"

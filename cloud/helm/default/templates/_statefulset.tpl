@@ -7,24 +7,6 @@ metadata:
     annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
-    # checkov:skip=CKV_K8S_38:Service account token mounting is optional
-    # checkov:skip=CKV_K8S_13:Resource limits are configurable by user
-    # checkov:skip=CKV_K8S_43:Image digest is not required for this template
-    # checkov:skip=CKV_K8S_20:Allow privilege escalation is configurable
-    # checkov:skip=CKV_K8S_22:Read-only root filesystem is optional
-    # checkov:skip=CKV_K8S_31:Seccomp profile is configurable
-    # checkov:skip=CKV_K8S_11:CPU limits are configurable
-    # checkov:skip=CKV_K8S_30:Security context is configurable
-    # checkov:skip=CKV_K8S_40:User UID is configurable
-    # checkov:skip=CKV_K8S_10:CPU requests are configurable
-    # checkov:skip=CKV_K8S_35:Secrets as env vars are allowed for Liferay
-    # checkov:skip=CKV_K8S_14:Image tag is configurable
-    # checkov:skip=CKV_K8S_28:NET_RAW capability is allowed if needed
-    # checkov:skip=CKV_K8S_37:Capabilities are configurable
-    # checkov:skip=CKV_K8S_12:Memory requests are configurable
-    # checkov:skip=CKV_K8S_29:Security context is configurable
-    # checkov:skip=CKV2_K8S_6:NetworkPolicy is optional
     labels:
         app: {{ include "liferay.name" .root }}{{ $suffix }}
         {{- include "liferay.labels" .root | nindent 8 }}
@@ -196,7 +178,6 @@ metadata:
     annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     labels:
         app: {{ include "liferay.name" .root }}{{ $suffix }}
         {{- include "liferay.labels" .root | nindent 8 }}
@@ -224,7 +205,6 @@ metadata:
     annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     labels:
         app: {{ include "liferay.name" .root }}{{ $suffix }}
         {{- include "liferay.labels" .root | nindent 8 }}
