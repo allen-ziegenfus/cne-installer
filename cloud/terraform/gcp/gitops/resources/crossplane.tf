@@ -1,14 +1,16 @@
 # ---------------------------------------------------------
 # 1. Direct IAM Bindings for Crossplane Kubernetes Service Accounts
 # ---------------------------------------------------------
-# We grant permissions directly to the KSA principals in the format:
-# serviceAccount:<PROJECT_ID>.svc.id.goog[<NAMESPACE>/<KSA_NAME>]
+# We grant permissions directly to the KSA principals using the 
+# Direct Workload Identity principal format.
 # ---------------------------------------------------------
 
 locals {
-  ksa_principal_prefix = "serviceAccount:${var.project_id}.svc.id.goog[${var.crossplane_namespace}"
+  # The principal format for direct KSA binding
+  ksa_principal_base = "principal://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${var.project_id}.svc.id.goog/subject/ns/${var.crossplane_namespace}/sa"
   
-  provider_ksa_bindings = {
+  # List of KSAs we want to grant permissions to
+  provider_ksas = {
     sql           = { role = "roles/cloudsql.admin", ksa = "provider-gcp-sql" }
     compute       = { role = "roles/compute.admin",  ksa = "provider-gcp-compute" }
     storage       = { role = "roles/storage.admin",  ksa = "provider-gcp-storage" }
@@ -18,11 +20,11 @@ locals {
 }
 
 resource "google_project_iam_member" "provider_direct_iam" {
-  for_each = local.provider_ksa_bindings
+  for_each = local.provider_ksas
 
   project = var.project_id
   role    = each.value.role
-  member  = "${local.ksa_principal_prefix}/${each.value.ksa}]"
+  member  = "${local.ksa_principal_base}/${each.value.ksa}"
 }
 
 # ---------------------------------------------------------
