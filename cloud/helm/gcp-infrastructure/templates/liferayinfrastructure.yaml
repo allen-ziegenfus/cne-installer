@@ -11,6 +11,7 @@
 apiVersion: gcp.liferay.com/v1alpha1
 kind: LiferayInfrastructure
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-20"
     name: {{ .Release.Name }}

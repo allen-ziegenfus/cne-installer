@@ -2,6 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+    # checkov:skip=CKV_K8S_49:Wildcard is required for the infrastructure provider
     name: crossplane-provider-gcp
 rules:
     -   apiGroups:
@@ -31,6 +32,7 @@ rules:
         resources: ["namespaces"]
         verbs: ["get", "list"]
     -   apiGroups: ["elasticsearch.k8s.elastic.co"]
+        # checkov:skip=CKV_K8S_49:Wildcard is required for the infrastructure provider
         resources: ["*"]
         verbs: ["*"]
 ---

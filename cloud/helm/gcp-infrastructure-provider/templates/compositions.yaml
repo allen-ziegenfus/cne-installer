@@ -9,6 +9,7 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
+  # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
   annotations:
     argocd.argoproj.io/sync-wave: "-50"
     liferay.com/template-hash: {{ $templateHash | quote }}
