@@ -92,8 +92,20 @@ spec:
                     GRANT cloudsqlsuperuser TO "{{ $databaseIamUser }}";
                     EOF
   managementPolicies: {{ $managementPoliciesOnce }}
+
 ---
 # 8. Managed Service Details Secret
+# This is conditionally included ONLY when the Grant Job is finished.
+{{- $job := index .observed.resources $jobName | default dict -}}
+{{- $jobStatus := $job.resource.status | default dict -}}
+{{- $isReady := false -}}
+{{- range $cond := $jobStatus.conditions | default list }}
+  {{- if and (eq $cond.type "Complete") (eq $cond.status "True") }}
+    {{- $isReady = true }}
+  {{- end }}
+{{- end }}
+
+{{- if $isReady }}
 apiVersion: kubernetes.m.crossplane.io/v1alpha1
 kind: Object
 metadata:
@@ -129,3 +141,4 @@ spec:
                 LIFERAY_OVERLAY_BUCKET_NAME: {{ $baseName }}-overlay
                 type: Opaque
     managementPolicies: {{ $managementPolicies }}
+{{- end }}
