@@ -1,3 +1,9 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# ARGOCD GIT REPOSITORY AUTHENTICATION
+# ---------------------------------------------------------------------------------------------------------------------
+# This stack configures how ArgoCD authenticates to your Git repositories.
+# It uses External Secrets Operator (ESO) to sync secrets from Google Secret Manager.
+
 resource "kubernetes_manifest" "git_repo_credentials_external_secret" {
   depends_on = [
     kubernetes_manifest.git_repo_credentials_secret_store,
@@ -107,7 +113,15 @@ resource "kubernetes_manifest" "git_repo_credentials_external_secret" {
       }
     }
   }
+
+  # Added to allow recovery from previous runs
+  wait {
+    fields = {
+      "status.conditions[0].status" = "True"
+    }
+  }
 }
+
 resource "kubernetes_manifest" "git_repo_credentials_secret_store" {
   field_manager {
     force_conflicts = true
@@ -132,6 +146,7 @@ resource "kubernetes_manifest" "git_repo_credentials_secret_store" {
     }
   }
 }
+
 resource "kubernetes_role" "eso_secret_writer" {
   metadata {
     labels = merge(
@@ -154,6 +169,7 @@ resource "kubernetes_role" "eso_secret_writer" {
     ]
   }
 }
+
 resource "kubernetes_role_binding" "eso_secret_writer_binding" {
   metadata {
     labels = merge(
