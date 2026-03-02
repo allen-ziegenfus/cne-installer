@@ -64,5 +64,3 @@ root_domain = ""
 # ---------------------------------------------------------------------------------------------------------------------
 # project_id   = ""
 # region       = ""
-# liferay_helm_chart_version = ""
-# github_workload_identity_pool_id = ""
