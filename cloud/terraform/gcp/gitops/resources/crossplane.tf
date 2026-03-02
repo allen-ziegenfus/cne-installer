@@ -15,6 +15,7 @@ locals {
     compute       = { role = "roles/compute.admin",  ksa = "provider-gcp-compute" }
     storage       = { role = "roles/storage.admin",  ksa = "provider-gcp-storage" }
     cloudplatform = { role = "roles/iam.serviceAccountAdmin", ksa = "provider-gcp-cloudplatform" }
+    projectiam    = { role = "roles/resourcemanager.projectIamAdmin", ksa = "provider-gcp-cloudplatform" }
     security      = { role = "roles/iam.securityAdmin", ksa = "provider-gcp-cloudplatform" }
   }
 }
