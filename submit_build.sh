@@ -3,7 +3,7 @@ PROJECT_ID=$1
 shift # Move past PROJECT_ID
 
 if [ -z "$PROJECT_ID" ]; then
-    echo "Usage: REGION=us-central1 ./submit_build.sh <PROJECT_ID> [--step=<step-id>]"
+    echo "Usage: ./submit_build.sh <PROJECT_ID> [--step=<step-id>]"
     exit 1
 fi
 

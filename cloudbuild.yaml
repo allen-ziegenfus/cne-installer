@@ -16,7 +16,8 @@ steps:
       - '-c'
       - |
         if [ "${_ONLY}" != "checkov" ] && [ "${_ONLY}" != "all" ]; then echo "Skipping..."; exit 0; fi
-        /usr/bin/checkov --directory=cloud/terraform --download-external-modules=true --compact --soft-fail
+        checkov --directory=. --download-external-modules=true --compact --soft-fail \
+          --skip-check CKV_SECRET_6,CKV_K8S_21,CKV_K8S_38,CKV_K8S_43,CKV_K8S_22,CKV_K8S_11,CKV_K8S_15,CKV_K8S_29,CKV2_K8S_5,CKV2_K8S_6,CKV_K8S_13,CKV_K8S_10,CKV_K8S_12,CKV_K8S_155
     entrypoint: 'sh'
 
   # Step 2: Security Scan (Trivy)

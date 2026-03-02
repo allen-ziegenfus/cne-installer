@@ -1,4 +1,5 @@
 locals {
+  # checkov:skip=CKV_SECRET_6:False positives for high entropy strings (OCI URLs and Regexes)
   project_number = data.google_project.project.number
   projectId      = var.project_id
   cluster_name   = "${var.deployment_name}-gke"
