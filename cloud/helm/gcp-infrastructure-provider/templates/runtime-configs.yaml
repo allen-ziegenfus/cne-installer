@@ -4,6 +4,7 @@
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: kubernetes-config
@@ -15,6 +16,7 @@ spec:
                     pkg.crossplane.io/provider: provider-kubernetes
             template:
                 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
                     labels:
                         pkg.crossplane.io/provider: provider-kubernetes
                 spec:
@@ -30,6 +32,7 @@ spec:
                     serviceAccountName: provider-kubernetes
     serviceAccountTemplate:
         metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
             name: provider-kubernetes
 
 ---
@@ -38,6 +41,7 @@ spec:
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-sql-config
@@ -49,6 +53,7 @@ spec:
                     pkg.crossplane.io/provider: provider-gcp-sql
             template:
                 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
                     labels:
                         pkg.crossplane.io/provider: provider-gcp-sql
                 spec:
@@ -64,6 +69,7 @@ spec:
                     serviceAccountName: provider-gcp-sql
     serviceAccountTemplate:
         metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
             name: provider-gcp-sql
 
 ---
@@ -72,6 +78,7 @@ spec:
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-storage-config
@@ -83,6 +90,7 @@ spec:
                     pkg.crossplane.io/provider: provider-gcp-storage
             template:
                 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
                     labels:
                         pkg.crossplane.io/provider: provider-gcp-storage
                 spec:
@@ -98,6 +106,7 @@ spec:
                     serviceAccountName: provider-gcp-storage
     serviceAccountTemplate:
         metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
             name: provider-gcp-storage
 
 ---
@@ -106,6 +115,7 @@ spec:
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-compute-config
@@ -117,6 +127,7 @@ spec:
                     pkg.crossplane.io/provider: provider-gcp-compute
             template:
                 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
                     labels:
                         pkg.crossplane.io/provider: provider-gcp-compute
                 spec:
@@ -132,6 +143,7 @@ spec:
                     serviceAccountName: provider-gcp-compute
     serviceAccountTemplate:
         metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
             name: provider-gcp-compute
 
 ---
@@ -140,6 +152,7 @@ spec:
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-cloudplatform-config
@@ -151,6 +164,7 @@ spec:
                     pkg.crossplane.io/provider: provider-gcp-cloudplatform
             template:
                 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
                     labels:
                         pkg.crossplane.io/provider: provider-gcp-cloudplatform
                 spec:
@@ -166,4 +180,5 @@ spec:
                     serviceAccountName: provider-gcp-cloudplatform
     serviceAccountTemplate:
         metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
             name: provider-gcp-cloudplatform

@@ -2,6 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     # checkov:skip=CKV_K8S_49:Wildcard is required for the infrastructure provider
     name: crossplane-provider-gcp
 rules:
@@ -16,6 +17,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-40"
     labels:
@@ -39,6 +41,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     annotations:
         argocd.argoproj.io/sync-wave: "-40"
     name: crossplane-provider-kubernetes-binding

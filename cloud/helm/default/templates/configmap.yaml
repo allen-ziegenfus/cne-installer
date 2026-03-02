@@ -91,6 +91,7 @@ data:
     {{- end }}
 kind: ConfigMap
 metadata:
+    # checkov:skip=CKV_K8S_21:Namespace is set dynamically by Helm/ArgoCD
     {{- with .Values.configmap.annotations }}
     annotations:
         {{- toYaml . | nindent 8 }}
