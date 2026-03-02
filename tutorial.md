@@ -80,12 +80,28 @@ To allow ArgoCD to sync from your new repository and provide SSO for your team, 
 > You will store these credentials securely in the next step using a helper script.
 
 ### 3. (Optional) Prepare Workspace Repository
-If you have a separate Liferay Workspace repository for overlays and custom logic:
-1.  **Configure App Access**: Ensure the GitHub App you created in the previous step is also installed on this repository (or your entire organization).
-2.  **Update Variables**: Copy the repository URL (e.g., `my-org/liferay-workspace`) and add it to `liferay_workspace_git_repo_url` in `terraform.tfvars`.
+If you have a separate Liferay Workspace repository for overlays and custom logic, we recommend using our "Self-Initialization" workflow:
+
+1.  **Create a Blank Repo**: Create a new private repository in your GitHub organization (do not initialize it with a README or license).
+2.  **Add Initialization Workflow**: 
+    *   Create a file at `.github/workflows/init.yml`.
+    *   Paste the content of our [Workspace Init Template](https://raw.githubusercontent.com/Ziggy-AZ/cne-installer/main/docs/templates/init-workspace.yml).
+    *   Commit this file to the `main` branch.
+3.  **Run the Workflow**:
+    *   Navigate to the **Actions** tab in your **new** repository.
+    *   Select **Initialize Liferay Workspace**.
+    *   Click **Run workflow** and enter your desired Liferay version (e.g., `dxp-2024.q1.11`).
+4.  **Result**: The workflow will automatically install Liferay Blade, initialize the workspace, and add the GCP deployment logic for you.
+
+**C. Connect to GCP**
+1.  **Update Variables**: Copy your Workspace repository URL (e.g., `my-org/liferay-workspace`) and add it to `liferay_workspace_git_repo_url` in `terraform.tfvars`.
+2.  **Configure App Access**: Ensure the GitHub App you created in the previous step is installed on this repository.
 
 > [!NOTE]
-> **GitHub Actions & WIF**: Your Workspace repository will automatically be granted permissions to push images to the Artifact Registry and files to the Overlay bucket using **Workload Identity Federation (WIF)**. No manual keys are required in your GitHub Secrets.
+> **Zero-Touch Configuration**: When you run the deployment, Terraform will automatically sign into your repository and configure all required GitHub Actions Variables (`GCP_REGION`, `GCP_WIF_PROVIDER`, etc.) for you.
+
+**D. Deploying**
+When you push your code to GitHub, the action will automatically authenticate via **Workload Identity Federation (WIF)**, build your Java modules and Client Extensions, and push them to your private Registry and Storage buckets in GCP.
 
 ## Optional: Advanced Configuration
 Before running the deployment, you can customize your environment by editing the Terraform variables file directly.

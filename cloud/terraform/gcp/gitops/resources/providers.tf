@@ -22,6 +22,15 @@ provider "helm" {
   }
 }
 
+provider "github" {
+  owner = var.liferay_workspace_git_repo_url != "" ? split("/", var.liferay_workspace_git_repo_url)[0] : "unknown"
+  app_auth {
+    id              = var.liferay_workspace_git_repo_url != "" ? jsondecode(data.google_secret_manager_secret_version.github_app_creds[0].secret_data).github_app_id : "0"
+    installation_id = var.liferay_workspace_git_repo_url != "" ? jsondecode(data.google_secret_manager_secret_version.github_app_creds[0].secret_data).github_app_installation_id : "0"
+    pem_file        = var.liferay_workspace_git_repo_url != "" ? jsondecode(data.google_secret_manager_secret_version.github_app_creds[0].secret_data).github_app_private_key : "empty"
+  }
+}
+
 terraform {
   required_providers {
     google = {
@@ -35,6 +44,10 @@ terraform {
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = "~> 2.36.0"
+    }
+    github = {
+      source  = "integrations/github"
+      version = "~> 6.0"
     }
   }
   required_version = ">=1.5.0"
