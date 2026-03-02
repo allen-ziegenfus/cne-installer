@@ -7,5 +7,3 @@ data:
   deploymentName: {{ $.Values.deploymentName | quote }}
   vpcName: {{ printf "%s-vpc" ($.Values.deploymentName | default "default") | quote }}
   projectNumber: {{ $.Values.gcp.projectNumber | quote }}
-  githubWorkloadIdentityPoolId: {{ $.Values.gcp.githubWorkloadIdentityPoolId | quote }}
-  liferayWorkspaceGitRepo: {{ $.Values.gcp.liferayWorkspaceGitRepo | quote }}

@@ -94,4 +94,10 @@ locals {
   allowed_github_repos = compact([
     local.workspace_repo_path
   ])
+
+  # Since environment names are dynamic (discovered by ArgoCD), 
+  # we use a prefix/suffix pattern for IAM conditions.
+  # Buckets start with a truncated version of the project ID.
+  overlay_bucket_prefix = substr(var.project_id, 0, 15)
+  overlay_bucket_suffix = "-overlay"
 }

@@ -29,21 +29,4 @@ spec:
     role: roles/storage.objectViewer
     member: "serviceAccount:{{ $gsaEmail }}"
   managementPolicies: {{ $managementPolicies }}
-
----
-{{- if $githubRepo }}
-# 3. Grant the GitHub Repository principal direct access to the Overlay Bucket
-apiVersion: storage.gcp.m.upbound.io/v1beta1
-kind: BucketIAMMember
-metadata:
-  annotations:
-    gotemplating.fn.crossplane.io/composition-resource-name: liferay-workspace-overlay-bucket-iam
-spec:
-  forProvider:
-    bucketRef:
-      name: {{ $baseName }}-overlay
-    role: roles/storage.objectAdmin
-    member: "principalSet://iam.googleapis.com/{{ $githubPoolName }}/attribute.repository/{{ $githubRepo }}"
-  managementPolicies: {{ $managementPolicies }}
-{{- end }}
 {{- end }}

@@ -23,8 +23,19 @@ else
         --project="$PROJECT_ID"
 fi
 
-# 2. Grant the Service Account project editor/admin roles 
-RESOURCES_ROLES=("roles/editor" "roles/owner" "roles/logging.logWriter" "roles/storage.objectViewer" "roles/secretmanager.secretAccessor")
+# 2. Grant the Service Account specific admin roles (Least Privilege)
+RESOURCES_ROLES=(
+    "roles/compute.admin" 
+    "roles/container.admin" 
+    "roles/storage.admin" 
+    "roles/cloudsql.admin" 
+    "roles/iam.serviceAccountAdmin" 
+    "roles/resourcemanager.projectIamAdmin"
+    "roles/secretmanager.admin"
+    "roles/artifactregistry.admin"
+    "roles/logging.logWriter"
+    "roles/monitoring.metricWriter"
+)
 
 echo "Ensuring project-level IAM bindings..."
 for ROLE in "${RESOURCES_ROLES[@]}"; do

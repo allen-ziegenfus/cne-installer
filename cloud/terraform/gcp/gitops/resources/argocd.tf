@@ -197,20 +197,8 @@ resource "kubernetes_manifest" "infrastructure_provider_application" {
                 value = var.deployment_name
               },
               {
-                name  = "gcp.cloudplatformGoogleServiceAccountEmail"
-                value = google_service_account.provider_gcp_cloudplatform_sa.email
-              },
-              {
                 name  = "gcp.clusterName"
                 value = local.cluster_name
-              },
-              {
-                name  = "gcp.computeGoogleServiceAccountEmail"
-                value = google_service_account.provider_gcp_compute_sa.email
-              },
-              {
-                name  = "gcp.githubWorkloadIdentityPoolId"
-                value = var.github_workload_identity_pool_id
               },
               {
                 name  = "gcp.networkName"
@@ -225,20 +213,8 @@ resource "kubernetes_manifest" "infrastructure_provider_application" {
                 value = local.project_number
               },
               {
-                name  = "gcp.sqlGoogleServiceAccountEmail"
-                value = google_service_account.provider_gcp_sql_sa.email
-              },
-              {
                 name  = "gcp.subnetworkName"
                 value = data.google_compute_subnetwork.private_subnet.name
-              },
-              {
-                name  = "gcp.storageGoogleServiceAccountEmail"
-                value = google_service_account.provider_gcp_storage_sa.email
-              },
-              {
-                name  = "gcp.liferayWorkspaceGitRepo"
-                value = var.liferay_workspace_git_repo_url
               },
               {
                 name  = "liferayServiceAccountRoleName"

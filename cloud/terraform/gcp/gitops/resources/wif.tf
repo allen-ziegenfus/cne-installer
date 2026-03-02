@@ -42,3 +42,19 @@ resource "google_artifact_registry_repository_iam_member" "workspace_gar_writer"
   role       = "roles/artifactregistry.writer"
   member     = "principalSet://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.github.workload_identity_pool_id}/attribute.repository/${var.liferay_workspace_git_repo_url}"
 }
+
+# We use a project-level binding with a condition instead of a bucket-level binding
+# to avoid a race condition where Terraform fails because the bucket hasn't been 
+# created by Crossplane yet.
+resource "google_project_iam_member" "workspace_overlay_bucket_admin" {
+  count   = var.liferay_workspace_git_repo_url != "" ? 1 : 0
+  project = var.project_id
+  role    = "roles/storage.objectAdmin"
+  member  = "principalSet://iam.googleapis.com/projects/${data.google_project.project.number}/locations/global/workloadIdentityPools/${google_iam_workload_identity_pool.github.workload_identity_pool_id}/attribute.repository/${var.liferay_workspace_git_repo_url}"
+
+  condition {
+    title       = "Restrict to Overlay Buckets"
+    description = "Grant access only to Liferay Overlay buckets in this project"
+    expression  = "resource.name.startsWith('projects/_/buckets/${local.overlay_bucket_prefix}') && resource.name.endsWith('${local.overlay_bucket_suffix}')"
+  }
+}

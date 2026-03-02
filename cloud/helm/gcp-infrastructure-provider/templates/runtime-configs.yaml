@@ -64,20 +64,18 @@ spec:
                     serviceAccountName: provider-gcp-sql
     serviceAccountTemplate:
         metadata:
-            annotations:
-                iam.gke.io/gcp-service-account: {{ $.Values.gcp.sqlGoogleServiceAccountEmail }}
             name: provider-gcp-sql
 
----
+    ---
 
-# 3. Runtime Config for GCP Storage (GCS) Provider
-apiVersion: pkg.crossplane.io/v1beta1
-kind: DeploymentRuntimeConfig
-metadata:
+    # 3. Runtime Config for GCP Storage (GCS) Provider
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    metadata:
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-storage-config
-spec:
+    spec:
     deploymentTemplate:
         spec:
             selector:
@@ -100,20 +98,18 @@ spec:
                     serviceAccountName: provider-gcp-storage
     serviceAccountTemplate:
         metadata:
-            annotations:
-                iam.gke.io/gcp-service-account: {{ $.Values.gcp.storageGoogleServiceAccountEmail }}
             name: provider-gcp-storage
 
----
+    ---
 
-# 4. Runtime Config for GCP Compute Provider
-apiVersion: pkg.crossplane.io/v1beta1
-kind: DeploymentRuntimeConfig
-metadata:
+    # 4. Runtime Config for GCP Compute Provider
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    metadata:
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-compute-config
-spec:
+    spec:
     deploymentTemplate:
         spec:
             selector:
@@ -136,20 +132,18 @@ spec:
                     serviceAccountName: provider-gcp-compute
     serviceAccountTemplate:
         metadata:
-            annotations:
-                iam.gke.io/gcp-service-account: {{ $.Values.gcp.computeGoogleServiceAccountEmail }}
             name: provider-gcp-compute
 
----
+    ---
 
-# 4. Runtime Config for GCP Compute Provider
-apiVersion: pkg.crossplane.io/v1beta1
-kind: DeploymentRuntimeConfig
-metadata:
+    # 4. Runtime Config for GCP Compute Provider
+    apiVersion: pkg.crossplane.io/v1beta1
+    kind: DeploymentRuntimeConfig
+    metadata:
     annotations:
         argocd.argoproj.io/sync-wave: "-90"
     name: gcp-cloudplatform-config
-spec:
+    spec:
     deploymentTemplate:
         spec:
             selector:
@@ -172,6 +166,4 @@ spec:
                     serviceAccountName: provider-gcp-cloudplatform
     serviceAccountTemplate:
         metadata:
-            annotations:
-                iam.gke.io/gcp-service-account: {{ $.Values.gcp.cloudplatformGoogleServiceAccountEmail }}
             name: provider-gcp-cloudplatform
