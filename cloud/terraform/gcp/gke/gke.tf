@@ -74,17 +74,6 @@ module "gke" {
 
 
 # ---------------------------------------------------------------------------------------------------------------------
-# 3. WORKLOAD IDENTITY & STORAGE CLASS
+# 3. STORAGE CLASS
 # ---------------------------------------------------------------------------------------------------------------------
-resource "google_service_account" "liferay_sa" {
-  account_id   = "${var.deployment_name}-sa"
-  display_name = "Liferay Workload Service Account"
-  project      = var.project_id
-}
-
-resource "google_service_account_iam_member" "liferay_wi_binding" {
-  service_account_id = google_service_account.liferay_sa.name
-  role               = "roles/iam.workloadIdentityUser"
-  member             = "serviceAccount:${var.project_id}.svc.id.goog[${var.deployment_namespace}/liferay-default]"
-  depends_on         = [module.gke]
-}
+# (Storage Class definition would go here if not handled by Autopilot default)
