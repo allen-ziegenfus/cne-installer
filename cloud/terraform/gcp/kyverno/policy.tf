@@ -1,93 +1,104 @@
-resource "kubernetes_manifest" "force_spot_nodes_policy" {
+resource "helm_release" "kyverno_policies" {
+	chart="raw"
 	count=var.spot ? 1 : 0
 	depends_on=[helm_release.kyverno]
+	name="kyverno-policies"
+	namespace=kubernetes_namespace_v1.kyverno.metadata[0].name
+	repository="https://bedag.github.io/helm-charts/"
 
-	manifest={
-		apiVersion="kyverno.io/v1"
-		kind="ClusterPolicy"
-		metadata={
-			name="force-spot-nodes"
-			annotations ={
-				"policies.kyverno.io/title"="Force Spot Nodes"
-				"policies.kyverno.io/category"="Cost Optimization"
-				"policies.kyverno.io/description"="Automatically injects GKE spot node affinity and tolerations to all Pods except for system namespaces."
-			}
-		}
-		spec={
-			background=false
-			rules =[
+	values=[
+		yamlencode({
+			resources=[
 				{
-					name="inject-spot-affinity-and-tolerations"
-					match={
-						any=[
-							{
-								resources ={
-									kinds =["Pod"]
-								}
-							}
-						]
+					apiVersion="kyverno.io/v1"
+					kind="ClusterPolicy"
+					metadata={
+						annotations={
+							"policies.kyverno.io/category"="Cost Optimization"
+							"policies.kyverno.io/description"="Automatically injects GKE spot node affinity and tolerations to all Pods except for system namespaces."
+							"policies.kyverno.io/title"="Force Spot Nodes"
+						}
+						name="force-spot-nodes"
 					}
-					exclude={
-						any=[
+					spec={
+						background=false
+						rules=[
 							{
-								resources ={
-									namespaces =[
-										"kube-system",
-										"kyverno",
-										"gatekeeper-system",
-										"gke-system",
+								exclude={
+									any=[
+										{
+											resources={
+												namespaces=[
+													"gatekeeper-system",
+													"gke-system",
+													"infra",
+													"kube-system",
+													"kyverno",
+												]
+											}
+										}
 									]
 								}
-							}
-						]
-					}
-					mutate={
-						patchStrategicMerge={
-							spec={
-								tolerations =[
-									{
-										effect="NoSchedule"
-										key="cloud.google.com/gke-spot"
-										operator="Equal"
-										value="true"
-									}
-								]
-								affinity={
-									nodeAffinity={
-										requiredDuringSchedulingIgnoredDuringExecution={
-											nodeSelectorTerms =[
-												{
-													matchExpressions =[
+								match={
+									any=[
+										{
+											resources={
+												kinds=["Pod"]
+											}
+										}
+									]
+								}
+								mutate={
+									patchStrategicMerge={
+										spec={
+											affinity={
+												nodeAffinity={
+													preferredDuringSchedulingIgnoredDuringExecution=[
 														{
-															key="cloud.google.com/gke-spot"
-															operator="In"
-															values =["true"]
+															preference={
+																matchExpressions=[
+																	{
+																		key="cloud.google.com/compute-class"
+																		operator="In"
+																		values=["Scale-Out"]
+																	}
+																]
+															}
+															weight=100
 														}
 													]
+													requiredDuringSchedulingIgnoredDuringExecution={
+														nodeSelectorTerms=[
+															{
+																matchExpressions=[
+																	{
+																		key="cloud.google.com/gke-spot"
+																		operator="In"
+																		values=["true"]
+																	}
+																]
+															}
+														]
+													}
+												}
+											}
+											tolerations=[
+												{
+													effect="NoSchedule"
+													key="cloud.google.com/gke-spot"
+													operator="Equal"
+													value="true"
 												}
 											]
 										}
-										preferredDuringSchedulingIgnoredDuringExecution=[
-											{
-												preference={
-													matchExpressions =[
-														{
-															key="cloud.google.com/compute-class"
-															operator="In"
-															values =["Scale-Out"]
-														}
-													]
-												}
-												weight=100
-											}
-										]
 									}
 								}
+								name="inject-spot-affinity-and-tolerations"
 							}
-						}
+						]
 					}
 				}
 			]
-		}
-	}
+		})
+	]
 }

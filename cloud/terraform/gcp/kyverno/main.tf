@@ -1,5 +1,5 @@
 locals {
-	common_labels ={
+	common_labels={
 		"app.kubernetes.io/managed-by"=local.terraform_manager_name
 		"environment"="internal"
 	}
@@ -8,75 +8,75 @@ locals {
 
 resource "kubernetes_namespace_v1" "kyverno" {
 	metadata {
-		labels =local.common_labels
+		labels=local.common_labels
 		name=var.kyverno_namespace
 	}
 }
 
 resource "helm_release" "kyverno" {
-	name="kyverno"
-	repository="https://kyverno.github.io/kyverno/"
 	chart="kyverno"
+	name="kyverno"
 	namespace=kubernetes_namespace_v1.kyverno.metadata[0].name
+	repository="https://kyverno.github.io/kyverno/"
 	version="3.3.4"
 
-	values =[
+	values=[
 		yamlencode({
 			admissionController={
-				replicas =2
 				container={
-					resources ={
-						limits ={
+					resources={
+						limits={
 							memory="512Mi"
 						}
-						requests ={
+						requests={
 							cpu="100m"
 							memory="256Mi"
 						}
 					}
 				}
+				replicas=2
 			}
 			backgroundController={
-				replicas =2
 				container={
-					resources ={
-						limits ={
+					resources={
+						limits={
 							memory="512Mi"
 						}
-						requests ={
+						requests={
 							cpu="100m"
 							memory="256Mi"
 						}
 					}
 				}
+				replicas=2
 			}
 			cleanupController={
-				replicas =2
 				container={
-					resources ={
-						limits ={
+					resources={
+						limits={
 							memory="512Mi"
 						}
-						requests ={
+						requests={
 							cpu="100m"
 							memory="256Mi"
 						}
 					}
 				}
+				replicas=2
 			}
 			reportsController={
-				replicas =2
 				container={
-					resources ={
-						limits ={
+					resources={
+						limits={
 							memory="512Mi"
 						}
-						requests ={
+						requests={
 							cpu="100m"
 							memory="256Mi"
 						}
 					}
 				}
+				replicas=2
 			}
 		})
 	]
