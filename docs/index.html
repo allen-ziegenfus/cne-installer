@@ -7,17 +7,32 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Documentation for Liferay Cloud Native GCP Installer">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <!-- Dark Theme with bigger fonts -->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  
+  <!-- Official Dark Theme -->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
+  
   <style>
     :root {
-      --base-font-size: 18px;
-      --theme-color: #2ea44f;
+      /* Bigger fonts for better readability */
+      --content-max-width: 900px;
+      --font-size-base: 18px;
+    }
+    body {
+      font-size: 18px !important;
     }
     .sidebar {
-      font-size: 16px;
+      font-size: 16px !important;
     }
-  </style>
+    .markdown-section {
+      padding-top: 40px !important;
+    }
+    /* Search box styling for dark theme */
+    .search input {
+      background-color: #2d333b !important;
+      color: #adbac7 !important;
+      border: 1px solid #444c56 !important;
+    }
+  </script>
 </head>
 <body>
   <div id="app">Loading...</div>
@@ -28,10 +43,13 @@
       loadSidebar: true,
       subMaxLevel: 3,
       auto2top: true,
+      // Fix for subfolder/GitHub Pages hosting
+      relativePath: true,
+      // Search configuration
       search: {
         maxAge: 86400000,
         paths: 'auto',
-        placeholder: 'Search documentation...',
+        placeholder: 'Search docs...',
         noData: 'No results found!',
         depth: 6
       }
@@ -40,6 +58,5 @@
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script>
 </body>
 </html>

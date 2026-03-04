@@ -5,42 +5,104 @@
     <title>GitHub App Manifest Generator</title>
     <style>
         body {
-            font-family: sans-serif;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            padding: 40px;
             line-height: 1.6;
+            background-color: #1a1b1c;
+            color: #e1e4e8;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         .field {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         label {
             display: block;
-            font-weight: bold;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2ea44f;
         }
 
         input[type="text"] {
-            width: 300px;
-            padding: 5px;
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            background-color: #2d333b;
+            border: 1px solid #444c56;
+            border-radius: 6px;
+            color: #adbac7;
+            font-size: 16px;
         }
 
         #manifest-preview {
-            background: #f4f4f4;
-            padding: 10px;
-            border: 1px solid #ccc;
+            background: #22272e;
+            padding: 20px;
+            border: 1px solid #444c56;
+            border-radius: 6px;
             white-space: pre-wrap;
-            font-family: monospace;
-            font-size: 12px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            color: #adbac7;
+            margin-top: 10px;
+        }
+
+        h2, h3 {
+            color: #2ea44f;
+            border-bottom: 1px solid #444c56;
+            padding-bottom: 10px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background-color: #2ea44f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #2c974b;
+        }
+
+        .instructions {
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #22272e;
+            border-left: 5px solid #2ea44f;
+            border-radius: 0 6px 6px 0;
+        }
+
+        pre.code-block {
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+            border: 1px solid #30363d;
         }
     </style>
     <script>
-        function updateManifest() {
-            const org = document.getElementById("org_name").value;
-            const url = document.getElementById("app_url").value;
+        // Define function on window to ensure global scope visibility
+        window.updateManifest = function() {
+            const orgEl = document.getElementById("org_name");
+            const urlEl = document.getElementById("app_url");
+            
+            if (!orgEl || !urlEl) return;
 
-            // Update Form Action to point to the correct Org
+            const org = orgEl.value;
+            const url = urlEl.value;
+
+            // Update Form Action
             const form = document.getElementById("manifest-form");
-            form.action = `https://github.com/organizations/${org}/settings/apps/new?state=abc123`;
+            if (form) {
+                form.action = `https://github.com/organizations/${org}/settings/apps/new?state=abc123`;
+            }
 
             // Construct the JSON
             const manifest = {
@@ -70,16 +132,18 @@
 
             const jsonString = JSON.stringify(manifest, null, 2);
 
-            // Set values for the hidden input and the visual preview
+            // Update UI
             const inputEl = document.getElementById("manifest_input");
             const previewEl = document.getElementById("manifest-preview");
             
             if (inputEl) inputEl.value = JSON.stringify(manifest);
             if (previewEl) previewEl.textContent = jsonString;
-        }
+        };
 
-        // Initialize on load
-        window.onload = updateManifest;
+        // Initialize
+        window.addEventListener('DOMContentLoaded', (event) => {
+            window.updateManifest();
+        });
     </script>
 </head>
 
@@ -88,30 +152,29 @@
 
     <div class="field">
         <label>GitHub Organization Name:</label>
-        <input type="text" id="org_name" value="Your Organization" oninput="updateManifest()">
+        <input type="text" id="org_name" value="Your Organization" oninput="window.updateManifest()">
     </div>
 
     <div class="field">
         <label>ArgoCD Base URL (no trailing slash):</label>
-        <input type="text" id="app_url" value="https://argocd.example.com" oninput="updateManifest()">
+        <input type="text" id="app_url" value="https://argocd.example.com" oninput="window.updateManifest()">
     </div>
 
     <form id="manifest-form" method="post">
         <input type="hidden" name="manifest" id="manifest_input">
-        <input type="submit" value="Register GitHub App"
-            style="padding: 10px 20px; background-color: #2ea44f; color: white; border: none; border-radius: 6px; cursor: pointer;">
+        <input type="submit" value="Register GitHub App" class="btn">
     </form>
 
     <h3>Manifest Preview:</h3>
     <div id="manifest-preview"></div>
 
-    <div style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-left: 5px solid #2ea44f;">
+    <div class="instructions">
         <h2>Setup Instructions</h2>
         <ol>
             <li><strong>Register the App:</strong> Fill in your Organization and ArgoCD URL above, then click <strong>"Register GitHub App"</strong>. This will take you to GitHub to create the app based on the manifest previewed above.</li>
             <li><strong>Install the App:</strong> Once created, go to the <strong>"Install App"</strong> menu in your GitHub App settings and install it on your organization.</li>
             <li><strong>Finalize with API:</strong> After installation, you will be redirected to a success page. To finalize the conversion of the temporary code to permanent credentials, use the following curl command (replacing the ID in the URL with the one from your success page):
-                <pre style="background: #272822; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto;">
+                <pre class="code-block">
 curl -X POST \
   -H "Accept: application/vnd.github.v3+json" \
   https://api.github.com/app-manifests/7fb8e2bd1650052c1830662892592a0e6f8048f1/conversions</pre>

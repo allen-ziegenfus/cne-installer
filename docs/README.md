@@ -23,4 +23,7 @@ Detailed comparisons between the GCP and AWS implementations:
 
 ## Getting Started
 
-To begin the installation, refer to the [Root README](https://github.com/Ziggy-AZ/cne-installer/blob/main/README.md) and the [Setup Tutorial](https://github.com/Ziggy-AZ/cne-installer/blob/main/tutorial.md) in the main repository.
+To begin the installation, refer to the following resources in the main repository:
+
+- [Root README](https://github.com/Ziggy-AZ/cne-installer/blob/main/README.md ":ignore")
+- [Setup Tutorial](https://github.com/Ziggy-AZ/cne-installer/blob/main/tutorial.md ":ignore")
