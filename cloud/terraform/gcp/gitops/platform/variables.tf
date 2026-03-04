@@ -37,7 +37,7 @@ variable "argo_cd_github_webhook_config" {
 }
 
 variable "argo_cd_namespace" {
-	default="argo_cd"
+	default="argo-cd"
 	type=string
 }
 

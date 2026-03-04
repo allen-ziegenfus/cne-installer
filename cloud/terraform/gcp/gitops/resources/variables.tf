@@ -1,5 +1,5 @@
 variable "argo_cd_namespace" {
-	default="argo_cd"
+	default="argo-cd"
 	type=string
 }
 variable "crossplane_namespace" {
