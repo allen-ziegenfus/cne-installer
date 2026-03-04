@@ -6,8 +6,8 @@ if [ -z "${PROJECT_ID}" ]; then
     exit 1
 fi
 
-local sa_name="infra-manager-runner"
-local sa_email="${sa_name}@${PROJECT_ID}.iam.gserviceaccount.com"
+sa_name="infra-manager-runner"
+sa_email="${sa_name}@${PROJECT_ID}.iam.gserviceaccount.com"
 
 echo "------------------------------------"
 echo "Configuring IAM for Infrastructure Manager."
@@ -24,7 +24,7 @@ else
 fi
 
 # 2. Grant the Service Account specific admin roles (Least Privilege)
-local resource_roles=(
+resource_roles=(
     "roles/compute.admin" 
     "roles/container.admin" 
     "roles/storage.admin" 
@@ -51,7 +51,6 @@ for role in "${resource_roles[@]}"; do
 done
 
 # 3. Get the Project Number
-local project_number
 project_number=$(gcloud projects describe "${PROJECT_ID}" --format="value(projectNumber)")
 
 # 4. Grant Infra Manager Service Agent permissions
@@ -69,7 +68,7 @@ gcloud iam service-accounts add-iam-policy-binding "${sa_email}" \
     --project="${PROJECT_ID}" \
     --quiet > /dev/null
 
-local cloud_build_sa="${project_number}@cloudbuild.gserviceaccount.com"
+cloud_build_sa="${project_number}@cloudbuild.gserviceaccount.com"
 
 echo "Granting Cloud Build service account permissions to manage Infra Manager."
 

@@ -13,7 +13,6 @@ START_TIME=$SECONDS
 # Attempt to extract region from terraform.tfvars if not provided as an env var
 if [ -z "$REGION" ]; then
     if [ -f "terraform.tfvars" ]; then
-        local region_val
         region_val=$(grep -E '^[[:space:]]*region[[:space:]]*=' terraform.tfvars | cut -d'=' -f2 | tr -d ' "' | xargs)
         REGION="${region_val}"
     fi
