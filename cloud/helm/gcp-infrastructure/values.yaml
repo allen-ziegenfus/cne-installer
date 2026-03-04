@@ -1,5 +1,4 @@
 enabled: true
 
-overlay:
-        enabled: false
-        githubRepo: ""
+global:
+    projectID: ""

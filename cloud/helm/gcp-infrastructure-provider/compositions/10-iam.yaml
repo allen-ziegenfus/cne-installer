@@ -3,23 +3,23 @@
 apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
 kind: ServiceAccount
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-gsa
-      name: {{ $gsaName }}
+    name: {{ $gsaName }}
 spec:
-      forProvider:
+    forProvider:
         displayName: "Liferay {{ $gsaName }} Service Account"
 ---
 # 2. Workload Identity Binding
 apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
 kind: ServiceAccountIAMMember
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-wi-binding
 spec:
-      forProvider:
+    forProvider:
         serviceAccountIdRef:
-          name: {{ $gsaName }}
+            name: {{ $gsaName }}
         role: roles/iam.workloadIdentityUser
         member: "serviceAccount:{{ $env.projectId }}.svc.id.goog[{{ $namespace }}/liferay-default]"
 ---
@@ -27,10 +27,10 @@ spec:
 apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
 kind: ProjectIAMMember
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-sql-instance-user-role
 spec:
-      forProvider:
+    forProvider:
         project: {{ $env.projectId }}
         role: roles/cloudsql.instanceUser
         member: "serviceAccount:{{ $gsaEmail }}"
@@ -39,10 +39,10 @@ spec:
 apiVersion: cloudplatform.gcp.m.upbound.io/v1beta1
 kind: ProjectIAMMember
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-sql-client-role
 spec:
-      forProvider:
+    forProvider:
         project: {{ $env.projectId }}
         role: roles/cloudsql.client
         member: "serviceAccount:{{ $gsaEmail }}"

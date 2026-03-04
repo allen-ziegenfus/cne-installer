@@ -4,29 +4,29 @@
 apiVersion: storage.gcp.m.upbound.io/v1beta1
 kind: Bucket
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-overlay-bucket
-      name: {{ $baseName }}-overlay
+    name: {{ $baseName }}-overlay
 spec:
-      forProvider:
+    forProvider:
         location: {{ $region }}
         storageClass: STANDARD
         uniformBucketLevelAccess: true
         forceDestroy: true
-      managementPolicies: {{ $managementPolicies }}
+    managementPolicies: {{ $managementPolicies }}
 
 ---
 # 2. Grant Liferay GSA Read Access to the Overlay Bucket
 apiVersion: storage.gcp.m.upbound.io/v1beta1
 kind: BucketIAMMember
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-gsa-overlay-bucket-iam
 spec:
-      forProvider:
+    forProvider:
         bucketRef:
-          name: {{ $baseName }}-overlay
+            name: {{ $baseName }}-overlay
         role: roles/storage.objectViewer
         member: "serviceAccount:{{ $gsaEmail }}"
-      managementPolicies: {{ $managementPolicies }}
+    managementPolicies: {{ $managementPolicies }}
 {{- end }}

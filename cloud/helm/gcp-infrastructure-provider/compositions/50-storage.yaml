@@ -3,28 +3,28 @@
 apiVersion: storage.gcp.m.upbound.io/v1beta1
 kind: Bucket
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-gcs-bucket
-      name: {{ $baseName }}-dl
+    name: {{ $baseName }}-dl
 spec:
-      forProvider:
+    forProvider:
         location: {{ $region }}
         storageClass: STANDARD
         uniformBucketLevelAccess: true
         forceDestroy: true
-      managementPolicies: {{ $managementPolicies }}
+    managementPolicies: {{ $managementPolicies }}
 
 ---
 # 2. Grant Storage Admin permissions to the Liferay GSA on this specific bucket
 apiVersion: storage.gcp.m.upbound.io/v1beta1
 kind: BucketIAMMember
 metadata:
-      annotations:
+    annotations:
         gotemplating.fn.crossplane.io/composition-resource-name: liferay-gcs-iam
 spec:
-      forProvider:
+    forProvider:
         bucketRef:
-          name: {{ $baseName }}-dl
+            name: {{ $baseName }}-dl
         role: roles/storage.admin
         member: "serviceAccount:{{ $gsaEmail }}"
-      managementPolicies: {{ $managementPolicies }}
+    managementPolicies: {{ $managementPolicies }}
