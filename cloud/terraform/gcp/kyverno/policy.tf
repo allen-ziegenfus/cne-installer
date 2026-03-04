@@ -15,30 +15,27 @@ resource "helm_release" "kyverno_policies" {
 					metadata={
 						annotations={
 							"policies.kyverno.io/category"="Cost Optimization"
-							"policies.kyverno.io/description"="Automatically injects GKE spot node affinity and tolerations to all Pods except for system namespaces."
-							"policies.kyverno.io/title"="Force Spot Nodes"
+							"policies.kyverno.io/description"="Automatically prefers GKE spot nodes for all Pods but allows fallback to standard nodes."
+							"policies.kyverno.io/title"="Prefer Spot Nodes"
 						}
-						name="force-spot-nodes"
+						name="prefer-spot-nodes"
 					}
 					spec={
 						background=false
 						rules=[
-							{
-								exclude={
-									any=[
-										{
-											resources={
-												namespaces=[
-													"gatekeeper-system",
-													"gke-system",
-													"infra",
-													"kube-system",
-													"kyverno",
-												]
-											}
+							exclude={
+								any=[
+									{
+										resources={
+											namespaces=[
+												"gatekeeper-system",
+												"gke-system",
+												"kube-system",
+											]
 										}
-									]
-								}
+									}
+								]
+							}
 								match={
 									any=[
 										{
@@ -55,6 +52,20 @@ resource "helm_release" "kyverno_policies" {
 												nodeAffinity={
 													preferredDuringSchedulingIgnoredDuringExecution=[
 														{
+															# Preference 1: Spot Nodes
+															preference={
+																matchExpressions=[
+																	{
+																		key="cloud.google.com/gke-spot"
+																		operator="In"
+																		values=["true"]
+																	}
+																]
+															}
+															weight=100
+														},
+														{
+															# Preference 2: Scale-Out compute class
 															preference={
 																matchExpressions=[
 																	{
@@ -64,22 +75,9 @@ resource "helm_release" "kyverno_policies" {
 																	}
 																]
 															}
-															weight=100
+															weight=50
 														}
 													]
-													requiredDuringSchedulingIgnoredDuringExecution={
-														nodeSelectorTerms=[
-															{
-																matchExpressions=[
-																	{
-																		key="cloud.google.com/gke-spot"
-																		operator="In"
-																		values=["true"]
-																	}
-																]
-															}
-														]
-													}
 												}
 											}
 											tolerations=[
@@ -93,7 +91,7 @@ resource "helm_release" "kyverno_policies" {
 										}
 									}
 								}
-								name="inject-spot-affinity-and-tolerations"
+								name="inject-spot-preference-and-tolerations"
 							}
 						]
 					}
