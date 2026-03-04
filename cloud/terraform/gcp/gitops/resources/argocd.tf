@@ -72,10 +72,6 @@ resource "kubernetes_manifest" "infrastructure_applicationset" {
                       name  = "rootDomain"
                       value = var.root_domain
                     },
-                    {
-                      name  = "spot"
-                      value = var.spot
-                    },
                   ]
                   valueFiles = [
                     "$values/${var.infrastructure_git_repo_config.source_paths.base}/${var.infrastructure_git_repo_config.source_paths.values_filename}",
@@ -313,10 +309,6 @@ resource "kubernetes_manifest" "liferay_applicationset" {
                     {
                       name  = "rootDomain"
                       value = var.root_domain
-                    },
-                    {
-                      name  = "spot"
-                      value = var.spot
                     },
                   ]
                   valueFiles = [

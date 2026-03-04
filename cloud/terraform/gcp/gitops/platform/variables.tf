@@ -69,9 +69,3 @@ variable "enable_argocd_ui_tools" {
   default = true
   type    = bool
 }
-
-variable "spot" {
-  description = "Use spot VMs for all platform pods"
-  type        = bool
-  default     = true
-}

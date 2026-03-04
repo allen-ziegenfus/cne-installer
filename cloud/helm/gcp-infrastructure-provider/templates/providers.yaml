@@ -54,3 +54,14 @@ spec:
     package: xpkg.upbound.io/upbound/provider-gcp-cloudplatform:v2.5.0
     runtimeConfigRef:
         name: gcp-cloudplatform-config
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+    annotations:
+        argocd.argoproj.io/sync-wave: "-80"
+    name: upbound-provider-family-gcp
+spec:
+    package: xpkg.upbound.io/upbound/provider-family-gcp:v2.5.0
+    runtimeConfigRef:
+        name: gcp-family-config

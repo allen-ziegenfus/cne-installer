@@ -118,7 +118,23 @@ steps:
           --inputs-file=terraform.tfvars 2>&1 | while read -r line; do printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$line"; done
         echo "[$(date)] Finished: gke"
 
-  # Step 6: Deploy the Gitops Platform stack
+  # Step 6: Deploy Kyverno
+  - name: 'google/cloud-sdk:510.0.0-slim'
+    id: 'kyverno'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -e -o pipefail
+        echo "[$(date)] Starting: kyverno"
+        if [ "${_ONLY}" != "kyverno" ] && [ "${_ONLY}" != "all" ]; then echo "Skipping..."; exit 0; fi
+        gcloud infra-manager deployments apply projects/${PROJECT_ID}/locations/${_REGION}/deployments/kyverno \
+          --service-account=projects/${PROJECT_ID}/serviceAccounts/infra-manager-runner@${PROJECT_ID}.iam.gserviceaccount.com \
+          --local-source=cloud/terraform/gcp/kyverno \
+          --inputs-file=terraform.tfvars 2>&1 | while read -r line; do printf "[%s] %s\n" "$(date '+%H:%M:%S')" "$line"; done
+        echo "[$(date)] Finished: kyverno"
+
+  # Step 7: Deploy the Gitops Platform stack
   - name: 'google/cloud-sdk:510.0.0-slim'
     id: 'platform'
     entrypoint: 'bash'

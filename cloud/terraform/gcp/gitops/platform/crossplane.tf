@@ -11,9 +11,6 @@ resource "helm_release" "crossplane" {
   wait             = true
   values = [
     yamlencode({
-      nodeSelector = local.node_selector
-      tolerations  = local.tolerations
-      affinity     = { nodeAffinity = local.node_affinity }
       resources = {
         limits = {
           cpu    = "500m"

@@ -134,6 +134,27 @@ spec:
 
 ---
 
+            template:
+                metadata:
+                    labels:
+                        pkg.crossplane.io/provider: upbound-provider-family-gcp
+                spec:
+                    containers:
+                        -   name: package-runtime
+                            resources:
+                                limits:
+                                    cpu: 200m
+                                    memory: 256Mi
+                                requests:
+                                    cpu: 100m
+                                    memory: 128Mi
+                    serviceAccountName: upbound-provider-family-gcp
+    serviceAccountTemplate:
+        metadata:
+            name: upbound-provider-family-gcp
+
+---
+
 # 5. Runtime Config for GCP Cloud Platform Provider
 apiVersion: pkg.crossplane.io/v1beta1
 kind: DeploymentRuntimeConfig

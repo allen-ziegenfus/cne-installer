@@ -182,8 +182,3 @@ variable "root_domain" {
   type = string
 }
 
-variable "spot" {
-  description = "Use spot VMs for all platform pods"
-  type        = bool
-  default     = true
-}

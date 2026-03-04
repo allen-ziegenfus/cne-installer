@@ -9,9 +9,6 @@ resource "helm_release" "external_secrets" {
     yamlencode(
       {
         certController = {
-          nodeSelector = local.node_selector
-          tolerations  = local.tolerations
-          affinity     = { nodeAffinity = local.node_affinity }
           resources = {
             limits = {
               cpu    = "20m"
@@ -24,9 +21,6 @@ resource "helm_release" "external_secrets" {
           }
         }
         installCRDs = true
-        nodeSelector = local.node_selector
-        tolerations  = local.tolerations
-        affinity     = { nodeAffinity = local.node_affinity }
         resources = {
           limits = {
             cpu    = "100m"
@@ -38,8 +32,6 @@ resource "helm_release" "external_secrets" {
           }
         }
         webhook = {
-          nodeSelector = local.node_selector
-          tolerations  = local.tolerations
           resources = {
             limits = {
               cpu    = "20m"

@@ -30,9 +30,6 @@ resource "helm_release" "argocd" {
             format = "json"
             level  = "info"
           }
-          nodeSelector = local.node_selector
-          tolerations  = local.tolerations
-          affinity     = { nodeAffinity = local.node_affinity }
         }
 
         controller = {

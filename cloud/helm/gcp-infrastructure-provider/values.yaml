@@ -1,4 +1,11 @@
 gcp:
   projectId: ""
+  projectNumber: ""
   clusterName: ""
+  networkName: ""
+  subnetworkName: ""
+
 crossplaneNamespace: crossplane-system
+deploymentName: ""
+rootDomain: ""
+liferayServiceAccountRoleName: ""
