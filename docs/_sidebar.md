@@ -1,0 +1,9 @@
+- [Home](README.md)
+- Architecture
+  - [Harmonization Plan](architecture/harmonization-plan.md)
+  - [Gateway Comparison](architecture/gateway-comparison.md)
+- Tools
+  - [GitHub App Generator](github-app-generator.html)
+- Main Project
+  - [Root README](../README.md)
+  - [Setup Tutorial](../tutorial.md)
