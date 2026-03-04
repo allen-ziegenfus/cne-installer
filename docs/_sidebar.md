@@ -5,6 +5,7 @@
   - [GitHub App Setup](github-app-setup.md)
 - Architecture
   - [Harmonization Summary](architecture/harmonization-summary.md)
+  - [GitHub Issues Progress](architecture/issues-progress.md)
   - [Module Configuration](architecture/terraform-variables.md)
   - [Flexibility Comparison](architecture/configuration-comparison.md)
   - [Application Delivery](architecture/application-delivery-comparison.md)
