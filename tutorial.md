@@ -3,9 +3,9 @@
 ## Welcome
 Welcome to the Liferay Cloud Native GCP Installer. This guided tutorial will walk you through the installation process.
 
-### 💡 Pro-Tips for Navigation
+### Navigation Tips
 * **Don't Close This Sidebar:** If you need to open a link to the Console, **right-click and "Open in New Tab"** to keep this guide visible.
-* **The "Resume" Icon:** If this panel disappears, look for the **Learn** (graduation cap) icon in the top-right header to bring it back.
+* **The "Resume" Icon:** If this panel disappears, look for the **graduation cap icon** in the top-right header to bring it back.
 
 To get started, click **Next**.
 
@@ -110,7 +110,7 @@ Before running the deployment, you can customize your environment by editing the
 Some features require secrets to be stored in Google Secret Manager before deployment.
 
 *   **Liferay DXP License:** (Mandatory for DXP)
-    1.  Upload your license XML file to Cloud Shell (use the **⋮ (three dots)** menu > **Upload**).
+    1.  Upload your license XML file to Cloud Shell (use the **three dots** menu > **Upload**).
     2.  Run the script pointing to your file:
     ```sh
     ./setup-secret.sh <walkthrough-project-id/> liferay-cloud-native-liferay-license-xml path/to/your/license.xml
