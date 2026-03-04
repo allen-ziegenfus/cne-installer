@@ -18,7 +18,11 @@
 *   **No Trailing Slashes:** URIs and bucket paths in logs should not have trailing slashes (e.g., `gs://bucket`).
 
 ### 3. Bash & Terraform Logic (The "Simplify" Rules)
-*   **Declaration & Assignment:** In Bash, consolidate `local` declaration and assignment: `local var=$(cmd)`. Only split them if you MUST check `$?` for the assignment.
+*   **Declaration & Assignment:** In Bash, consolidate `local` declaration and assignment: `local var="${val}"`. **Exception:** Split them only if using a sub-shell:
+    ```bash
+    local var
+    var=$(cmd)
+    ```
 *   **No Assignment Spacing:** Remove spaces around `=` in Shell and Terraform: `key=value`.
 *   **Brand Integrity:** Use `argocd` (identifiers) and `ArgoCD` (text).
 *   **No Abbreviations:** Use full descriptive names: `configuration_json_file` instead of `config_file`.
