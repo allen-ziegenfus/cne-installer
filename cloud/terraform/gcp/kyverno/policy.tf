@@ -29,10 +29,8 @@ resource "helm_release" "kyverno_policies" {
 										{
 											resources={
 												namespaces=[
-													"argo-cd",
 													"gatekeeper-system",
 													"gke-system",
-													"infra",
 													"kube-system",
 												]
 											}
@@ -55,7 +53,7 @@ resource "helm_release" "kyverno_policies" {
 												nodeAffinity={
 													preferredDuringSchedulingIgnoredDuringExecution=[
 														{
-															# Preference 1: Spot Nodes
+															# Preference 1: Spot Nodes (High Weight)
 															preference={
 																matchExpressions=[
 																	{
@@ -83,18 +81,13 @@ resource "helm_release" "kyverno_policies" {
 													]
 												}
 											}
-											tolerations=[
-												{
-													effect="NoSchedule"
-													key="cloud.google.com/gke-spot"
-													operator="Equal"
-													value="true"
-												}
-											]
+											# REMOVED: forced tolerations. 
+											# By removing the toleration, pods will only go to Spot nodes IF they are preferred,
+											# but will schedule on Standard nodes immediately if Spot is unavailable.
 										}
 									}
 								}
-								name="inject-spot-preference-and-tolerations"
+								name="inject-spot-preference"
 							}
 						]
 					}
