@@ -54,11 +54,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 1000m
-                                    memory: 1.5Gi
+                                    cpu: 500m
+                                    memory: 1Gi
                                 requests:
                                     cpu: 200m
-                                    memory: 256Mi
+                                    memory: 512Mi
                     serviceAccountName: provider-gcp-sql
     serviceAccountTemplate:
         metadata:
@@ -122,11 +122,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 1000m
-                                    memory: 1.5Gi
+                                    cpu: 500m
+                                    memory: 1Gi
                                 requests:
                                     cpu: 200m
-                                    memory: 256Mi
+                                    memory: 512Mi
                     serviceAccountName: provider-gcp-compute
     serviceAccountTemplate:
         metadata:
@@ -190,11 +190,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 1000m
-                                    memory: 1.5Gi
+                                    cpu: 500m
+                                    memory: 1Gi
                                 requests:
                                     cpu: 200m
-                                    memory: 256Mi
+                                    memory: 512Mi
                     serviceAccountName: provider-gcp-cloudplatform
     serviceAccountTemplate:
         metadata:

@@ -29,10 +29,8 @@ resource "helm_release" "kyverno_policies" {
 										{
 											resources={
 												namespaces=[
-													"argocd",
 													"gatekeeper-system",
 													"gke-system",
-													"infra",
 													"kube-system",
 													"kyverno"
 												]
