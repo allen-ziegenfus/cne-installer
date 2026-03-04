@@ -174,6 +174,18 @@
     <div id="manifest-preview"></div>
 
     <div class="instructions">
+        <h2>Setup Instructions</h2>
+        <ol>
+            <li><strong>Register:</strong> Click "Register GitHub App" above. This will take you to GitHub to create the app.</li>
+            <li><strong>Install:</strong> Once created, navigate to "Install App" in your new app's settings and install it on your organization.</li>
+            <li><strong>Finalize:</strong> After installation, you will be redirected to a success page containing a <code>code</code>. Use this code in the following <code>curl</code> command to retrieve your App ID and Private Key:
+                <pre class="code-block">
+curl -X POST \
+  -H "Accept: application/vnd.github.v3+json" \
+  https://api.github.com/app-manifests/YOUR_CODE_FROM_URL/conversions</pre>
+            </li>
+        </ol>
+
         <h2>Why these permissions?</h2>
         
         <div class="permission-item">
@@ -200,13 +212,6 @@
             <span class="permission-name">Actions & Variables (write)</span>: 
             Used by the automated installer to configure GitHub Actions secrets and variables needed for the CI/CD pipeline (e.g., pushing images to Artifact Registry).
         </div>
-
-        <h2>Next Steps</h2>
-        <ol>
-            <li><strong>Register:</strong> Click "Register GitHub App" above.</li>
-            <li><strong>Install:</strong> Go to "Install App" in your new app's settings and select your organization.</li>
-            <li><strong>Finalize:</strong> After installation, you will be redirected. Use the finalization curl command provided on that page.</li>
-        </ol>
     </div>
 </body>
 

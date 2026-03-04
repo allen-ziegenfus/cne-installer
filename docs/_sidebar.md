@@ -1,6 +1,8 @@
 - [Home](README.md)
-- [Getting Started](getting-started.md)
+- [Launch in Cloud Shell](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/Ziggy-AZ/cne-installer&cloudshell_tutorial=tutorial.md&cloudshell_workspace=.&cloudshell_open_in_editor=terraform.tfvars ":ignore")
 - [Source Code](https://github.com/Ziggy-AZ/cne-installer)
+- Setup
+  - [GitHub App Setup](github-app-setup.md)
 - Architecture
   - [Harmonization Summary](architecture/harmonization-summary.md)
   - [Module Configuration](architecture/terraform-variables.md)

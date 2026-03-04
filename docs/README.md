@@ -4,7 +4,8 @@ Welcome to the documentation for the **Liferay Cloud Native GCP Installer**. Thi
 
 ## Resources
 
-- **[Getting Started Guide](getting-started.md)** (Full Tutorial)
+- **[Launch in Cloud Shell](https://shell.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https://github.com/Ziggy-AZ/cne-installer&cloudshell_tutorial=tutorial.md&cloudshell_workspace=.&cloudshell_open_in_editor=terraform.tfvars)** (Guided Setup)
+- **[GitHub App Setup](github-app-setup.md)** (SSO & Repo Access)
 - **[Source Code Repository](https://github.com/Ziggy-AZ/cne-installer)** (Main Project)
 
 ## Architecture & Harmonization
