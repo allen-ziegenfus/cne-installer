@@ -48,4 +48,5 @@ skip-path:
     - "cloud/terraform/gcp/gke/helm/gateway-infra"
 
 compact: true
+quiet: true
 soft-fail: false
