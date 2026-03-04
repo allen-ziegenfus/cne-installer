@@ -1,4 +1,4 @@
-variable "argocd_auth_config" {
+variable "argo_cd_auth_config" {
 	type=object({
 		enable_sso=optional(bool, false)
 		github=optional(object({

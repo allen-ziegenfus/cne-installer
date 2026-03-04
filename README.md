@@ -8,7 +8,7 @@ Click the button below to start the guided setup in Google Cloud Shell.
 If you'd like to use a GitHub App for SSO / GitHub repo access, you can use the [GitHub App Manifest Tool](https://ziggy-az.github.io/cne-installer/).
 
 ### Steps:
-1. **Generate Manifest**: Enter your **GitHub Organization** and **ArgoCD Base URL** (e.g., `https://argocd.example.com`) into the tool.
+1. **Generate Manifest**: Enter your **GitHub Organization** and **ArgoCD Base URL** (e.g., `https://argo-cd.example.com`) into the tool.
 2. **Register**: Click **Register GitHub App**. You will be redirected to GitHub to name and create the app.
 3. **Install**: After creation, navigate to **Install App** in the GitHub App settings and install it on your organization.
 4. **Retrieve Credentials**: Upon installation, you will be redirected to a success page. 
