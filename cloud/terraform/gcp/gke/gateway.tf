@@ -3,7 +3,7 @@ resource "helm_release" "gateway_crds" {
 	chart="${path.module}/helm/gateway-crds"
 	namespace="infra"
 	create_namespace=true
-	version="1.0.0"
+	version="1.0.1"
 }
 
 resource "helm_release" "gateway_infra" {
@@ -11,7 +11,7 @@ resource "helm_release" "gateway_infra" {
 	chart="${path.module}/helm/gateway-infra"
 	namespace="infra"
 	create_namespace=true
-	version="1.0.2"
+	version="1.0.3"
 	skip_crds =true
 
 	depends_on=[helm_release.gateway_crds]
