@@ -15,24 +15,22 @@
     :root {
       --content-max-width: 900px;
       --font-size-base: 18px;
+      --theme-color: #2ea44f;
     }
-    /* Ensure sidebar is visible and styled */
-    .sidebar {
-      background-color: #282828 !important;
-      border-right: 1px solid #333 !important;
-    }
-    .sidebar-nav li a {
-      font-size: 16px !important;
-    }
-    /* Larger fonts for content */
-    .markdown-section {
+    body {
       font-size: 18px !important;
       line-height: 1.6;
     }
-    /* Search box styling */
+    .sidebar {
+      background-color: #222 !important;
+      font-size: 16px !important;
+    }
+    .markdown-section {
+      padding: 40px 15px;
+    }
     .search input {
       background-color: #333 !important;
-      color: #fff !important;
+      color: #ccc !important;
       border: 1px solid #444 !important;
     }
   </style>
@@ -45,10 +43,9 @@
       repo: 'https://github.com/Ziggy-AZ/cne-installer',
       loadSidebar: true,
       auto2top: true,
-      subMaxLevel: 2,
-      // Critical for GitHub Pages subfolder hosting
+      subMaxLevel: 3,
+      // Fixed for GitHub Pages
       basePath: './',
-      // Explicitly set homepage
       homepage: 'README.md',
       search: {
         maxAge: 86400000,
