@@ -5,32 +5,46 @@
   <title>Liferay Cloud Native Documentation</title>
   <link rel="icon" href="https://www-cdn.liferay.com/documents/d/guest/liferay-logo">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Documentation for Liferay Cloud Native GCP Installer">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   
-  <!-- Official Dark Theme -->
+  <!-- Official Dark Theme (Reverted to the one you liked) -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/dark.css">
   
   <style>
     :root {
       --content-max-width: 900px;
-      --font-size-base: 18px;
       --theme-color: #2ea44f;
     }
+    /* Global font size increase */
     body {
       font-size: 18px !important;
       line-height: 1.6;
     }
+    /* Sidebar styling */
     .sidebar {
-      background-color: #222 !important;
       font-size: 16px !important;
+      background-color: #282828 !important;
     }
+    .sidebar-nav li a {
+      color: #ccc !important;
+    }
+    .sidebar-nav li.active > a {
+      color: var(--theme-color) !important;
+      font-weight: bold;
+    }
+    /* Content styling */
     .markdown-section {
       padding: 40px 15px;
     }
+    /* Code block styling */
+    .markdown-section pre {
+      background-color: #1a1b1c !important;
+      border: 1px solid #333;
+    }
+    /* Search box styling */
     .search input {
       background-color: #333 !important;
-      color: #ccc !important;
+      color: #fff !important;
       border: 1px solid #444 !important;
     }
   </style>
@@ -44,7 +58,7 @@
       loadSidebar: true,
       auto2top: true,
       subMaxLevel: 3,
-      // Fixed for GitHub Pages
+      // Relative paths are safest for GH Pages subfolders
       basePath: './',
       homepage: 'README.md',
       search: {
