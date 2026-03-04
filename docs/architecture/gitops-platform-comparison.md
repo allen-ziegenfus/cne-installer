@@ -8,7 +8,7 @@ This report analyzes the architectural differences between the Google Cloud Plat
 | Feature | GCP Implementation | AWS Implementation |
 | :--- | :--- | :--- |
 | **ArgoCD Version** | `9.4.4` (Chart Version) | `9.1.5` (Chart Version) |
-| **Namespace** | `argo-cd` (Managed via `kubernetes_namespace`) | `argocd` (Managed via `kubernetes_namespace`) |
+| **Namespace** | `argocd` (Managed via `kubernetes_namespace`) | `argocd` (Managed via `kubernetes_namespace`) |
 | **Authentication** | **SSO Support:** Optional SSO module for OIDC/SAML. | **Default:** Standard ArgoCD local auth (with KMS secret management). |
 | **UI Enhancements** | **Argo CD UI Tools:** Optional module for additional platform tools. | **Standard:** Standard ArgoCD UI. |
 | **Health Checks** | Custom Lua health check for `LiferayInfrastructure` (GCP-flavored). | Custom Lua health check for `LiferayInfrastructure` (AWS-flavored). |
@@ -31,5 +31,5 @@ GCP's use of `google_secret_manager_secret_version` for sensitive information li
 
 ## 3. Recommendations for GCP Harmonization
 1.  **ArgoCD Version:** Ensure both platforms are aligned on the same ArgoCD chart version (preferably the newer `9.4.4` used in GCP) to ensure feature parity and security.
-2.  **Naming Convention:** Standardize the ArgoCD namespace (GCP uses `argo-cd`, AWS uses `argocd`) to simplify cross-platform scripts and documentation.
+2.  **Naming Convention:** Standardize the ArgoCD namespace (GCP uses `argocd`, AWS uses `argocd`) to simplify cross-platform scripts and documentation.
 3.  **UI/SSO Alignment:** Propose the adoption of the SSO and UI tools modules for the AWS platform to provide a consistent administrative experience across clouds.

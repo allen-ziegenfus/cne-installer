@@ -83,30 +83,30 @@ This document provides a comprehensive reference for all Terraform variables use
 
 | Variable Name | Type | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `argo_cd_auth_config` | `object` | See `variables.tf` | Configuration object for ArgoCD authentication and RBAC |
-| `argo_cd_domain` | `string` | `""` | N/A |
-| `argo_cd_github_webhook_config` | `object` | See `variables.tf` | Configuration object for ArgoCD authentication and RBAC |
-| `argo_cd_namespace` | `string` | `"argo-cd"` | N/A |
+| `argocd_auth_config` | `object` | See `variables.tf` | Configuration object for ArgoCD authentication and RBAC |
+| `argocd_domain` | `string` | `""` | N/A |
+| `argocd_github_webhook_config` | `object` | See `variables.tf` | Configuration object for ArgoCD authentication and RBAC |
+| `argocd_namespace` | `string` | `"argocd"` | N/A |
 | `crossplane_namespace` | `string` | `"crossplane-system"` | N/A |
 | `deployment_name` | `string` | `"liferay-gcp"` | N/A |
-| `enable_argo_cd_ui_tools` | `bool` | `true` | N/A |
+| `enable_argocd_ui_tools` | `bool` | `true` | N/A |
 | `external_secrets_namespace` | `string` | `"external-secrets"` | N/A |
 | `project_id` | `string` | Required | N/A |
 | `region` | `string` | `"us-central1"` | N/A |
 
 ### Argo CD Auth Resources Module
-**Location:** `cloud/terraform/gcp/gitops/platform/modules/argo_cd_auth_resources/`
+**Location:** `cloud/terraform/gcp/gitops/platform/modules/argocd_auth_resources/`
 
 | Variable Name | Type | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `argo_cd_auth_config` | `object` | Required | Configuration object for ArgoCD authentication and RBAC |
+| `argocd_auth_config` | `object` | Required | Configuration object for ArgoCD authentication and RBAC |
 
 ## GitOps Resources
 **Location:** `cloud/terraform/gcp/gitops/resources/`
 
 | Variable Name | Type | Default Value | Description |
 | :--- | :--- | :--- | :--- |
-| `argo_cd_namespace` | `string` | `"argo-cd"` | N/A |
+| `argocd_namespace` | `string` | `"argocd"` | N/A |
 | `crossplane_namespace` | `string` | `"crossplane-system"` | N/A |
 | `deployment_name` | `string` | `"liferay-gcp"` | N/A |
 | `external_secrets_namespace` | `string` | `"external-secrets"` | N/A |

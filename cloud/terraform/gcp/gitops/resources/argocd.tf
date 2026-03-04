@@ -18,7 +18,7 @@ resource "kubernetes_manifest" "infrastructure_applicationset" {
 					"app.kubernetes.io/name"="liferay-infrastructure-applicationset"
 			})
 			name="liferay-infrastructure-applicationset"
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			generators =[
@@ -114,7 +114,7 @@ resource "kubernetes_manifest" "infrastructure_appproject" {
 		kind="AppProject"
 		metadata={
 			name=local.infrastructure_appproject_name
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 			labels =merge(
 				local.common_labels,
 				{
@@ -172,7 +172,7 @@ resource "kubernetes_manifest" "infrastructure_provider_application" {
 					"app.kubernetes.io/name"="liferay-infrastructure-provider"
 			})
 			name="liferay-infrastructure-provider"
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			destination={
@@ -260,7 +260,7 @@ resource "kubernetes_manifest" "liferay_applicationset" {
 					"app.kubernetes.io/name"="liferay-applicationset"
 			})
 			name="liferay-applicationset"
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			generators =[
@@ -369,7 +369,7 @@ resource "kubernetes_manifest" "liferay_appproject" {
 					"app.kubernetes.io/name"="liferay-appproject"
 			})
 			name=local.liferay_appproject_name
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			clusterResourceWhitelist=[

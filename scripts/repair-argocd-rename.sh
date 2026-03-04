@@ -1,6 +1,6 @@
 #!/bin/bash
-# repair-argo-cd-rename.sh
-# Fixes ownership conflicts and stuck namespaces after renaming ArgoCD to Argo_CD.
+# repair-argocd-rename.sh
+# Fixes ownership conflicts and stuck namespaces after renaming ArgoCD.
 
 echo "Step 1: Patching ArgoCD CRDs with NEW ownership (argo-cd)..."
 CRDS=(

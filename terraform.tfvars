@@ -28,10 +28,10 @@ liferay_workspace_git_repo_path = ""
 root_domain = ""
 
 # ArgoCD Domain: Specifically for accessing the ArgoCD UI.
-# argo_cd_domain = "argocd.example.com"
+# argocd_domain = "argocd.example.com"
 
 # ArgoCD Auth: Enable GitHub SSO and RBAC.
-# argo_cd_auth_config = {
+# argocd_auth_config = {
 #   enable_sso = true
 #   github = {
 #     org   = "your-github-org"
@@ -43,7 +43,7 @@ root_domain = ""
 # }
 
 # ArgoCD Webhook: Enable instant syncing on GitHub push.
-# argo_cd_github_webhook_config = {
+# argocd_github_webhook_config = {
 #   enable_webhook = true
 # }
 

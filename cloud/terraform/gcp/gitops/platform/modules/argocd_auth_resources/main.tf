@@ -1,9 +1,9 @@
 data "google_secret_manager_secret_version" "github_id" {
-	secret=var.argo_cd_auth_config.github.client_id_secret_name
+	secret=var.argocd_auth_config.github.client_id_secret_name
 }
 
 data "google_secret_manager_secret_version" "github_secret" {
-	secret=var.argo_cd_auth_config.github.client_secret_secret_name
+	secret=var.argocd_auth_config.github.client_secret_secret_name
 }
 
 output "auth_helm_values" {
@@ -20,8 +20,8 @@ output "auth_helm_values" {
 							clientID="$dex.github.clientID"
 							clientSecret="$dex.github.clientSecret"
 							orgs =[{
-								name=var.argo_cd_auth_config.github.org
-								teams =var.argo_cd_auth_config.github.teams
+								name=var.argocd_auth_config.github.org
+								teams =var.argocd_auth_config.github.teams
 							}]
 						}
 					}]
@@ -30,8 +30,8 @@ output "auth_helm_values" {
 			rbac={
 				create=true
 				"policy.csv"=join("\n", concat(
-					[for team in var.argo_cd_auth_config.github.teams : "g, ${var.argo_cd_auth_config.github.org}:${team}, role:admin"],
-					[for user in var.argo_cd_auth_config.rbac.admins : "g, ${user}, role:admin"],
+					[for team in var.argocd_auth_config.github.teams : "g, ${var.argocd_auth_config.github.org}:${team}, role:admin"],
+					[for user in var.argocd_auth_config.rbac.admins : "g, ${user}, role:admin"],
 					["p, role:admin, applications, action/argoproj.io/Application/wipe-infrastructure, *, allow"],
 					["p, role:admin, applications, action/argoproj.io/Application/restore-infrastructure, *, allow"]
 				))

@@ -31,19 +31,19 @@ The primary differences stem from:
 ## 3. Compliance & Architectural Standards
 
 ### 3.1 Brand Integrity (ArgoCD)
-The project adheres to strict **Brand Integrity** rules established by project leadership. The transition from `argocd` to `argo_cd` (identifiers) and `ArgoCD` (text) is a direct implementation of these standards.
+The project adheres to strict **Brand Integrity** rules established by project leadership. Standardizing on `argocd` (identifiers) and `ArgoCD` (text) ensures consistency across both AWS and GCP implementations.
 
 *   **Core Mandate:** GEMINI.md (Section 3: Brand Integrity)
-*   **Original Authority:** Brian Chan, Commit [`5563d217`](https://github.com/liferay/liferay-portal/commit/5563d217d4cecc1f984969d90bc5454539ed6b60) - *"LCD-49975 Brand name is Argo CD"*
+*   **Alignment:** AWS team implementation (standardizing on `argocd` without underscores).
 
-This ensures that the GCP implementation is not only technically functional but also architecturally compliant with the project's brand and naming conventions.
+This ensures that the GCP implementation is not only technically functional but also architecturally compliant with the project's brand and naming conventions across all cloud providers.
 
 ## 4. Harmonization TODO List
 
 ### Priority 1: GitOps & Reliability (Immediate)
 - [ ] **Adopt Sync-Waves**: Update all GCP resources (Gateway, EnvoyProxy, Compositions) to use the AWS standard sync-wave tiering (e.g., `-110` for infra, `-30` for gateway).
 - [ ] **Standardize Tags**: Implement `function-tag-manager` in GCP Crossplane compositions to ensure the `DeploymentName` label is consistently applied to all cloud resources.
-- [ ] **Namespace Consistency**: Ensure ArgoCD is installed in the same namespace across both clouds (align on either `argo-cd` or `argocd`).
+- [ ] **Namespace Consistency**: Ensure ArgoCD is installed in the same namespace across both clouds (align on either `argocd` or `argocd`).
 
 ### Priority 2: Security & Portability (Short-term)
 - [ ] **Real IP Support**: Implement `GCPGatewayPolicy` (or equivalent) in the `gateway-infra` chart to mirror the AWS `ClientTrafficPolicy` for ProxyProtocol support.

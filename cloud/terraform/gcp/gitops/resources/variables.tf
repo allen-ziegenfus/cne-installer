@@ -1,5 +1,5 @@
-variable "argo_cd_namespace" {
-	default="argo-cd"
+variable "argocd_namespace" {
+	default="argocd"
 	type=string
 }
 variable "crossplane_namespace" {
@@ -26,7 +26,7 @@ variable "infrastructure_git_repo_config" {
 	type=object(
 		{
 			auth=object({
-				internal_secret_name=optional(string, "argo-cd-infrastructure-git-credentials")
+				internal_secret_name=optional(string, "argocd-infrastructure-git-credentials")
 				method=optional(string, "https")
 				secret_store_provider_hcl=optional(any, null)
 				ssh_private_key_vault_secret_property=optional(string, "git_ssh_private_key")
@@ -103,7 +103,7 @@ variable "liferay_git_repo_config" {
 	type=object(
 		{
 			auth=object({
-				internal_secret_name=optional(string, "argo-cd-liferay-git-credentials")
+				internal_secret_name=optional(string, "argocd-liferay-git-credentials")
 				method=optional(string, "https")
 				secret_store_provider_hcl=optional(any, null)
 				ssh_private_key_vault_secret_property=optional(string, "git_ssh_private_key")

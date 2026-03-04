@@ -18,7 +18,7 @@ The following issues have been fully addressed in the current codebase:
 | **11** | Get gitops working in GCP | ArgoCD platform bootstrap is fully functional and validated in `cloud/terraform/gcp/gitops/platform`. |
 | **24** | Auto Pilot | Cluster implementation is standardized on GKE Autopilot in `gke.tf`. |
 | **22** | Allow specifying GKE CIDR ranges | Variables for `pod_cidr` and `service_cidr` are implemented in `gke/variables.tf`. |
-| **38** | Auth woes | Resolved via the `argo_cd_auth_resources` module with explicit secret mapping. |
+| **38** | Auth woes | Resolved via the `argocd_auth_resources` module with explicit secret mapping. |
 | **12** | Do we need this cluster command? | **CLOSED.** |
 
 ---
@@ -30,7 +30,7 @@ These issues have seen progress but require further refinement or validation:
 | Issue # | Title | Status |
 | :--- | :--- | :--- |
 | **18** | What other folders under AWS need GCP equivalents? | Partially addressed via current architectural comparison docs. Backups and dependencies still need GCP-specific code. |
-| **83** | Rework service accounts | Standardized on `argo_cd_` prefix, but per-environment SA granularity (Issue #50) is still pending. |
+| **83** | Rework service accounts | Standardized on `argocd_` prefix, but per-environment SA granularity (Issue #50) is still pending. |
 | **77** | Overlay enabled logic not working | Fixed indentation and logic in `values.yaml` recently, but needs end-to-end verification. |
 | **20** | Validate deployment name length | Basic validation exists in `variables.tf`, but needs to be more robust across all modules. |
 | **43** | Custom Lua scripts | Health checks are implemented for `LiferayInfrastructure`, but custom icons/buttons are pending. |

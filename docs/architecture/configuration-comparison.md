@@ -44,7 +44,7 @@ There is a fundamental architectural difference in how managed services are conf
 *   **GCP**: Uses **Crossplane**. There are no Terraform variables for Cloud SQL or GCS because these resources are declared as Kubernetes manifests. This provides better "Day 2" management via GitOps but reduces visibility in the initial Terraform plan.
 
 ### Platform (ArgoCD, Add-ons)
-*   **Authentication**: GCP provides a structured `argo_cd_auth_config` object, supporting OIDC and RBAC. It also uniquely supports **GitHub App** authentication for GitOps repositories.
+*   **Authentication**: GCP provides a structured `argocd_auth_config` object, supporting OIDC and RBAC. It also uniquely supports **GitHub App** authentication for GitOps repositories.
 *   **Add-ons**: GCP includes variables for **Kyverno**, **Cloudflare**, and **Netbird**, which are missing from the AWS Terraform surface.
 
 ### Backup and Data Lifecycle

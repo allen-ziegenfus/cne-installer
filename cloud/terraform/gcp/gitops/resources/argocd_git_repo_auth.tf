@@ -19,7 +19,7 @@ resource "kubernetes_manifest" "git_repo_credentials_external_secret" {
 		metadata={
 			labels =local.common_labels
 			name=each.value.internal_secret_name
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			data=flatten(
@@ -131,7 +131,7 @@ resource "kubernetes_manifest" "git_repo_credentials_secret_store" {
 					"app.kubernetes.io/name"=each.value.secret_store_name
 			})
 			name=each.value.secret_store_name
-			namespace=var.argo_cd_namespace
+			namespace=var.argocd_namespace
 		}
 		spec={
 			provider=yamldecode(
@@ -147,8 +147,8 @@ resource "kubernetes_role" "eso_secret_writer" {
 			{
 				"app.kubernetes.io/name"="eso-secret-writer"
 		})
-		name="eso-argo-cd-git-repo-auth-writer"
-		namespace=var.argo_cd_namespace
+		name="eso-argocd-git-repo-auth-writer"
+		namespace=var.argocd_namespace
 	}
 	rule {
 		api_groups =[""]
@@ -170,8 +170,8 @@ resource "kubernetes_role_binding" "eso_secret_writer_binding" {
 			{
 				"app.kubernetes.io/name"="eso-secret-writer-binding"
 		})
-		name="eso-argo-cd-git-repo-auth-binding"
-		namespace=var.argo_cd_namespace
+		name="eso-argocd-git-repo-auth-binding"
+		namespace=var.argocd_namespace
 	}
 	role_ref {
 		api_group="rbac.authorization.k8s.io"

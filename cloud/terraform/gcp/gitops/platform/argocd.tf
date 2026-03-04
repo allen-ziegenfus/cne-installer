@@ -1,11 +1,11 @@
-resource "helm_release" "argo_cd" {
+resource "helm_release" "argocd" {
 	chart="argo-cd"
 	create_namespace=false
 	depends_on=[
-		kubernetes_namespace.argo_cd
+		kubernetes_namespace.argocd
 	]
-	name="argo-cd"
-	namespace=var.argo_cd_namespace
+	name="argocd"
+	namespace=var.argocd_namespace
 	repository="https://argoproj.github.io/argo-helm"
 	upgrade_install=true
 	values=[
@@ -52,8 +52,8 @@ resource "helm_release" "argo_cd" {
 					}
 					secret={
 						extra={
-							"server.secretkey"=random_password.argo_cd_server_secretkey.result
-							"webhook.github.secret"=var.argo_cd_github_webhook_config.enable_webhook ? data.google_secret_manager_secret_version.github_webhook[0].secret_data : ""
+							"server.secretkey"=random_password.argocd_server_secretkey.result
+							"webhook.github.secret"=var.argocd_github_webhook_config.enable_webhook ? data.google_secret_manager_secret_version.github_webhook[0].secret_data : ""
 						}
 					}
 				}
@@ -72,7 +72,7 @@ resource "helm_release" "argo_cd" {
 				}
 
 				global={
-					domain=var.argo_cd_domain != "" ? var.argo_cd_domain : null
+					domain=var.argocd_domain != "" ? var.argocd_domain : null
 					logging={
 						format="json"
 						level="info"
@@ -145,41 +145,41 @@ resource "helm_release" "argo_cd" {
 					}
 				}
 		}),
-		var.argo_cd_auth_config.enable_sso ? module.argo_cd_auth_resources[0].auth_helm_values : "{}",
-		var.enable_argo_cd_ui_tools ? module.argo_cd_ui_tools[0].argo_cd_ui_tools_helm_values : "{}"
+		var.argocd_auth_config.enable_sso ? module.argocd_auth_resources[0].auth_helm_values : "{}",
+		var.enable_argocd_ui_tools ? module.argocd_ui_tools[0].argocd_ui_tools_helm_values : "{}"
 	]
 	version="9.4.4"
 	wait=true
 }
 
 data "google_secret_manager_secret_version" "github_webhook" {
-	count=var.argo_cd_github_webhook_config.enable_webhook ? 1 : 0
-	secret=var.argo_cd_github_webhook_config.webhook_secret_name
+	count=var.argocd_github_webhook_config.enable_webhook ? 1 : 0
+	secret=var.argocd_github_webhook_config.webhook_secret_name
 }
 
-resource "kubernetes_namespace" "argo_cd" {
+resource "kubernetes_namespace" "argocd" {
 	metadata {
 		labels=local.common_labels
-		name=var.argo_cd_namespace
+		name=var.argocd_namespace
 	}
 }
 
-resource "random_password" "argo_cd_server_secretkey" {
+resource "random_password" "argocd_server_secretkey" {
 	length=32
 	special=false
 }
 
-resource "kubernetes_manifest" "argo_cd_http_route" {
-	count=var.argo_cd_domain != "" ? 1 : 0
+resource "kubernetes_manifest" "argocd_http_route" {
+	count=var.argocd_domain != "" ? 1 : 0
 	manifest={
 		"apiVersion"="gateway.networking.k8s.io/v1"
 		"kind"="HTTPRoute"
 		"metadata"={
-			"name"="argo-cd-route"
-			"namespace"=var.argo_cd_namespace
+			"name"="argocd-route"
+			"namespace"=var.argocd_namespace
 		}
 		"spec"={
-			"hostnames"=[var.argo_cd_domain]
+			"hostnames"=[var.argocd_domain]
 			"parentRefs"=[
 				{
 					"name"="shared-gateway"
@@ -190,7 +190,7 @@ resource "kubernetes_manifest" "argo_cd_http_route" {
 				{
 					"backendRefs"=[
 						{
-							"name"="argo-cd-server"
+							"name"="argocd-server"
 							"port"=80
 						}
 					]
@@ -200,13 +200,13 @@ resource "kubernetes_manifest" "argo_cd_http_route" {
 	}
 }
 
-module "argo_cd_auth_resources" {
-	argo_cd_auth_config=var.argo_cd_auth_config
-	count=var.argo_cd_auth_config.enable_sso ? 1 : 0
-	source="./modules/argo_cd_auth_resources"
+module "argocd_auth_resources" {
+	argocd_auth_config=var.argocd_auth_config
+	count=var.argocd_auth_config.enable_sso ? 1 : 0
+	source="./modules/argocd_auth_resources"
 }
 
-module "argo_cd_ui_tools" {
-	count=var.enable_argo_cd_ui_tools ? 1 : 0
-	source="./modules/argo_cd_ui_tools"
+module "argocd_ui_tools" {
+	count=var.enable_argocd_ui_tools ? 1 : 0
+	source="./modules/argocd_ui_tools"
 }

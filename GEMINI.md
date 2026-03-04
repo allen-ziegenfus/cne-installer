@@ -20,7 +20,7 @@
 ### 3. Bash & Terraform Logic (The "Simplify" Rules)
 *   **Declaration & Assignment:** In Bash, consolidate `local` declaration and assignment: `local var=$(cmd)`. Only split them if you MUST check `$?` for the assignment.
 *   **No Assignment Spacing:** Remove spaces around `=` in Shell and Terraform: `key=value`.
-*   **Brand Integrity:** Use underscores to reflect brand spaces in identifiers: `argo_cd` instead of `argocd`.
+*   **Brand Integrity:** Use `argocd` (identifiers) and `ArgoCD` (text).
 *   **No Abbreviations:** Use full descriptive names: `configuration_json_file` instead of `config_file`.
 *   **Vertical Padding:** Use empty `echo ""` commands to group output logically in CLI tools.
 

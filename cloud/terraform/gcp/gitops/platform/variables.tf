@@ -1,4 +1,4 @@
-variable "argo_cd_auth_config" {
+variable "argocd_auth_config" {
 	default={
 		enable_sso=false
 		github=null
@@ -19,12 +19,12 @@ variable "argo_cd_auth_config" {
 	})
 }
 
-variable "argo_cd_domain" {
+variable "argocd_domain" {
 	default=""
 	type=string
 }
 
-variable "argo_cd_github_webhook_config" {
+variable "argocd_github_webhook_config" {
 	default={
 		enable_webhook=false
 		webhook_secret_name=""
@@ -36,8 +36,8 @@ variable "argo_cd_github_webhook_config" {
 	})
 }
 
-variable "argo_cd_namespace" {
-	default="argo-cd"
+variable "argocd_namespace" {
+	default="argocd"
 	type=string
 }
 
@@ -51,7 +51,7 @@ variable "deployment_name" {
 	type=string
 }
 
-variable "enable_argo_cd_ui_tools" {
+variable "enable_argocd_ui_tools" {
 	default=true
 	type=bool
 }

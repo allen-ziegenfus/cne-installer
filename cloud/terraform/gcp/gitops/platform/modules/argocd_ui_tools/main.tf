@@ -1,4 +1,4 @@
-output "argo_cd_ui_tools_helm_values" {
+output "argocd_ui_tools_helm_values" {
 	value=yamlencode({
 		configs ={
 			cm={

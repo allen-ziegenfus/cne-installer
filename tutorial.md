@@ -187,10 +187,10 @@ You can copy/paste these examples into the file:
     `authorized_ipv4_cidr_block = "YOUR_IP/32"`
 *   **Custom Domains:**
     `domains = ["example.com", "myportal.io"]`
-    `argo_cd_domain = "argocd.example.com"`
+    `argocd_domain = "argocd.example.com"`
 *   **ArgoCD GitHub SSO:**
     ```hcl
-    argo_cd_auth_config = {
+    argocd_auth_config = {
       enable_sso = true
       github = {
         org   = "your-github-org"

@@ -30,5 +30,5 @@ Your GCP POC uses a guided tutorial approach (`tutorial.md`) combined with surgi
 
 ## 3. Recommendations for GCP Harmonization
 1.  **JSON Configuration**: Consider adopting the AWS pattern of a single `config.json` for all variables, then using a script to generate the `terraform.tfvars`. This would allow for better programmatic validation of inputs before the build starts.
-2.  **Port-Forwarding Utility**: Add a helper script similar to the AWS `_port_forward_argo_cd` function to simplify initial access to the ArgoCD UI after a fresh installation.
+2.  **Port-Forwarding Utility**: Add a helper script similar to the AWS `_port_forward_argocd` function to simplify initial access to the ArgoCD UI after a fresh installation.
 3.  **Unified Entrypoint**: Create a single `bootstrap.sh` for GCP that consolidates the `setup-*` scripts into a cohesive flow, mirroring the AWS team's ease of use while keeping the "Cloud-Native" backend.

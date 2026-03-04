@@ -29,10 +29,10 @@ echo "Checking for subshell spacing."
 grep -rE "\$\(\\\\" . --exclude-dir={.git,.terraform} --exclude=bc-lint.sh && \
 	fail "Add a space after the opening parenthesis of a subshell if followed by a backslash: \$( \ "
 
-# 4. Check for Argo CD brand naming in scripts
-echo "Checking for Argo CD brand naming."
-find . -name "*.sh" -not -path "*/.git/*" -not -name "bc-lint.sh" | xargs grep -l "argocd" | xargs grep -vE "argo_cd|argo_cd_namespace" && \
-	fail "Rename functions/variables to use argo_cd (reflecting the brand name Argo CD)."
+# 4. Check for ArgoCD brand naming in scripts
+echo "Checking for ArgoCD brand naming."
+find . -name "*.sh" -not -path "*/.git/*" -not -name "bc-lint.sh" | xargs grep -l "argo_cd" && \
+	fail "Rename functions/variables to use argocd (reflecting the brand name ArgoCD)."
 
 # 5. Check for uppercase common nouns in logs
 echo "Checking for uppercase common nouns in logs."
