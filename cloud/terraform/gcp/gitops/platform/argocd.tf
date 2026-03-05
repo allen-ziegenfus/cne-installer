@@ -203,10 +203,10 @@ resource "kubernetes_manifest" "argocd_http_route" {
 module "argocd_auth_resources" {
 	argocd_auth_config=var.argocd_auth_config
 	count=var.argocd_auth_config.enable_sso ? 1 : 0
-	source="./modules/argocd_auth_resources"
+	source="./modules/argocd-auth-resources"
 }
 
 module "argocd_ui_tools" {
 	count=var.enable_argocd_ui_tools ? 1 : 0
-	source="./modules/argocd_ui_tools"
+	source="./modules/argocd-ui-tools"
 }
