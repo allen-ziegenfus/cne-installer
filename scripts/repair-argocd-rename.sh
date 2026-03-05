@@ -21,7 +21,17 @@ function main {
       fi
     done
 
-    echo "Step 2: Clearing stuck ApplicationSets and Applications."
+    echo "Step 2: Adopting existing Kyverno 'prefer-spot-nodes' ClusterPolicy."
+    if kubectl get clusterpolicy prefer-spot-nodes &>/dev/null; then
+        echo "Found existing prefer-spot-nodes policy. Patching for Helm adoption..."
+        kubectl annotate clusterpolicy prefer-spot-nodes meta.helm.sh/release-name="kyverno-policies" --overwrite
+        kubectl annotate clusterpolicy prefer-spot-nodes meta.helm.sh/release-namespace="kyverno" --overwrite
+        kubectl label clusterpolicy prefer-spot-nodes app.kubernetes.io/managed-by="Helm" --overwrite
+    else
+        echo "ClusterPolicy prefer-spot-nodes not found, skipping."
+    fi
+
+    echo "Step 3: Clearing stuck ApplicationSets and Applications."
     local resources=(
       "applicationsets.argoproj.io"
       "applications.argoproj.io"
@@ -33,7 +43,7 @@ function main {
       kubectl get "${res}" --all-namespaces -o name | xargs -I{} kubectl patch {} --all-namespaces --type=merge -p '{"metadata":{"finalizers":null}}' 2>/dev/null
     done
 
-    echo "Step 3: Cleaning up stuck \"argocd\" or \"argo-cd\" namespaces."
+    echo "Step 4: Cleaning up stuck \"argocd\" or \"argo-cd\" namespaces."
     for ns in "argocd" "argo-cd"; do
       if kubectl get ns "${ns}" &>/dev/null; then
         echo "Namespace \"${ns}\" found. Forcing cleanup."
@@ -50,8 +60,8 @@ function main {
       fi
     done
 
-    echo "Step 4: Ready for Terraform."
-    echo "You can now run your terraform destroy or apply again."
+    echo "Step 5: Ready for Terraform."
+    echo "You can now run: ./submit_build.sh <PROJECT_ID> --step=kyverno"
 }
 
 main "${@}"
