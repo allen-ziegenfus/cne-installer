@@ -20,11 +20,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 500m
-                                    memory: 512Mi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 100m
-                                    memory: 128Mi
+                                    cpu: 250m
+                                    memory: 512Mi
                     serviceAccountName: provider-kubernetes
     serviceAccountTemplate:
         metadata:
@@ -54,10 +54,10 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 500m
-                                    memory: 1Gi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 200m
+                                    cpu: 250m
                                     memory: 512Mi
                     serviceAccountName: provider-gcp-sql
     serviceAccountTemplate:
@@ -88,11 +88,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 500m
-                                    memory: 512Mi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 100m
-                                    memory: 128Mi
+                                    cpu: 250m
+                                    memory: 512Mi
                     serviceAccountName: provider-gcp-storage
     serviceAccountTemplate:
         metadata:
@@ -122,10 +122,10 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 500m
-                                    memory: 1Gi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 200m
+                                    cpu: 250m
                                     memory: 512Mi
                     serviceAccountName: provider-gcp-compute
     serviceAccountTemplate:
@@ -156,11 +156,11 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 200m
-                                    memory: 256Mi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 100m
-                                    memory: 128Mi
+                                    cpu: 250m
+                                    memory: 512Mi
                     serviceAccountName: upbound-provider-family-gcp
     serviceAccountTemplate:
         metadata:
@@ -190,10 +190,10 @@ spec:
                         -   name: package-runtime
                             resources:
                                 limits:
-                                    cpu: 500m
-                                    memory: 1Gi
+                                    cpu: 1000m
+                                    memory: 2Gi
                                 requests:
-                                    cpu: 200m
+                                    cpu: 250m
                                     memory: 512Mi
                     serviceAccountName: provider-gcp-cloudplatform
     serviceAccountTemplate:

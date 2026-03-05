@@ -1,13 +1,12 @@
 resource "google_project_service" "apis" {
+	disable_on_destroy=false
 	for_each=toset([
-		"compute.googleapis.com",             # For VPC and Nodes
-		"container.googleapis.com",           # For GKE
-		"iam.googleapis.com",                 # For Service Accounts
-		"artifactregistry.googleapis.com",    # For Images
-		"cloudresourcemanager.googleapis.com" # Required for project updates
+		"artifactregistry.googleapis.com",
+		"cloudresourcemanager.googleapis.com",
+		"compute.googleapis.com",
+		"container.googleapis.com",
+		"iam.googleapis.com",
 	])
-
 	project=var.project_id
 	service=each.key
-	disable_on_destroy=false
 }

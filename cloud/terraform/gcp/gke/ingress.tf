@@ -1,46 +1,44 @@
 resource "helm_release" "nginx_ingress" {
-	# Only deploy if mode is ingress
+	chart="ingress-nginx"
+	cleanup_on_fail=true
 	count=var.networking_mode == "ingress" ? 1 : 0
-
+	create_namespace=true
+	depends_on=[
+		module.gke,
+	]
 	name="nginx-ingress-controller"
 	namespace="nginx-ingress-controller"
-	repository="https://kubernetes.github.io/ingress-nginx"
-	chart="ingress-nginx"
-	version="4.11.3"
-	create_namespace=true
-	upgrade_install=false
 	replace=true
-	cleanup_on_fail=true
+	repository="https://kubernetes.github.io/ingress-nginx"
 	timeout=900
-	wait=true
-
-	depends_on=[module.gke]
-
-	values =[
+	upgrade_install=false
+	values=[
 		yamlencode({
 			controller={
 				config={
-					"use-forwarded-headers"="true"
 					"compute-full-forwarded-for"="true"
-					"use-proxy-protocol"="false" # GCP L4 LB usually doesn't need Proxy Protocol if externalTrafficPolicy is Local
+					"use-forwarded-headers"="true"
+					"use-proxy-protocol"="false",
+				}
+				resources={
+					limits={
+						cpu="500m"
+						memory="512Mi",
+					}
+					requests={
+						cpu="100m"
+						memory="256Mi",
+					}
 				}
 				service={
-					type="ClusterIP"
-					annotations ={
-						"cloud.google.com/load-balancer-type"="Internal"
+					annotations={
+						"cloud.google.com/load-balancer-type"="Internal",
 					}
-				}
-				resources ={
-					limits ={
-						cpu="500m"
-						memory="512Mi"
-					}
-					requests ={
-						cpu="100m"
-						memory="256Mi"
-					}
-				}
-			}
-		})
+					type="ClusterIP",
+				},
+			},
+		}),
 	]
+	version="4.11.3"
+	wait=true
 }

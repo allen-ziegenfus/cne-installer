@@ -35,6 +35,11 @@ resource "helm_release" "kyverno_policies" {
 													"kyverno"
 												]
 											}
+										},
+										{
+											resources={
+												kinds=["Job"]
+											}
 										}
 									]
 								}

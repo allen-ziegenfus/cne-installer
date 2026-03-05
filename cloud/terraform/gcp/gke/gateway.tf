@@ -1,36 +1,30 @@
 resource "helm_release" "gateway_crds" {
-	name="gateway-crds"
 	chart="${path.module}/helm/gateway-crds"
-	namespace="infra"
 	create_namespace=true
+	name="gateway-crds"
+	namespace="infra"
 	version="1.0.1"
 }
-
 resource "helm_release" "gateway_infra" {
-	name="gateway-infra"
 	chart="${path.module}/helm/gateway-infra"
-	namespace="infra"
 	create_namespace=true
-	version="1.0.3"
-	skip_crds =true
-
-	depends_on=[helm_release.gateway_crds]
-
-	# Ensure the subchart (Envoy Controller) is enabled
-	set=[{
-		name="envoy-gateway.enabled"
-		value=var.networking_mode == "gateway" ? "true" : "false"
-	}]
-
-	# Pass the domains list as a native Helm list
-	values =[
-		yamlencode({
-			domains =var.domains
-		})
+	depends_on=[
+		helm_release.gateway_crds,
 	]
-
-	description="Hash: ${filesha256("${path.module}/helm/gateway-infra/values.yaml")}"
-
-	# Combine with this to ensure pods actually restart
-	recreate_pods =true
+	name="gateway-infra"
+	namespace="infra"
+	recreate_pods=true
+	set=[
+		{
+			name="envoy-gateway.enabled"
+			value=var.networking_mode == "gateway" ? "true" : "false"
+		},
+	]
+	skip_crds=true
+	values=[
+		yamlencode({
+			domains=var.domains,
+		}),
+	]
+	version="1.0.3"
 }

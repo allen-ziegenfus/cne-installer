@@ -21,9 +21,9 @@ function main {
       fi
     done
 
-    echo "Step 2: Adopting existing Kyverno 'prefer-spot-nodes' ClusterPolicy."
+    echo "Step 2: Adopting existing Kyverno \"prefer-spot-nodes\" ClusterPolicy."
     if kubectl get clusterpolicy prefer-spot-nodes &>/dev/null; then
-        echo "Found existing prefer-spot-nodes policy. Patching for Helm adoption..."
+        echo "Found existing prefer-spot-nodes policy. Patching for Helm adoption."
         kubectl annotate clusterpolicy prefer-spot-nodes meta.helm.sh/release-name="kyverno-policies" --overwrite
         kubectl annotate clusterpolicy prefer-spot-nodes meta.helm.sh/release-namespace="kyverno" --overwrite
         kubectl label clusterpolicy prefer-spot-nodes app.kubernetes.io/managed-by="Helm" --overwrite
