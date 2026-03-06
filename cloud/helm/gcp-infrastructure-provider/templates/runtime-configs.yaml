@@ -157,10 +157,10 @@ spec:
                             resources:
                                 limits:
                                     cpu: 1000m
-                                    memory: 2Gi
+                                    memory: 1Gi
                                 requests:
                                     cpu: 500m
-                                    memory: 512mi
+                                    memory: 512Mi
                     serviceAccountName: upbound-provider-family-gcp
     serviceAccountTemplate:
         metadata:
