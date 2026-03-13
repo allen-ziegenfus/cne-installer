@@ -1,7 +1,9 @@
-# GKE Autopilot vs. Standard: Observations
+# GKE Autopilot vs. Standard: Operational Experience
 
 ## Executive Summary
-This report documents the operational challenges and cost considerations discovered during the POC phase while using GKE Autopilot compared to GKE Standard. While Autopilot aligns better with the AWS "managed" philosophy, it introduces unique complexities around Spot node forcing and cost management.
+This report documents the operational challenges and cost considerations discovered during the POC phase while using GKE Autopilot compared to GKE Standard. While GKE Autopilot is marketed as a "hands-free" SaaS-like experience, this investigation concludes that **GKE Standard is the superior choice for Liferay Cloud Native deployments**. 
+
+GKE Standard provides **Simplicity through Transparency**, allowing for absolute cost certainty and the infrastructure flexibility required for our architectural roadmap (e.g., Envoy Gateway), whereas Autopilot introduces a "functional ceiling" and unpredictable "black box" behavior.
 
 ## 1. The Two "Flavors" of GKE
 
@@ -10,32 +12,45 @@ This report documents the operational challenges and cost considerations discove
 | **Pricing Model** | Pay-per-node (VM resources). | Pay-per-pod (Requested resources). |
 | **Control Surface** | Direct node pool management. | Label-driven pod configuration. |
 | **Spot Strategy** | **Explicit:** Taint/Tolerate node pools. | **Implicit:** Injected via pod labels. |
-| **Complexity** | Higher (Node lifecycle management). | Lower (Hands-off infrastructure). |
+| **Operational Toil** | Moderate (Manual pool config). | Minimal (Hands-off infrastructure). |
+| **Predictability** | **High:** Deterministic node lifecycle. | **Lower:** "Black box" scheduling. |
+| **Complexity** | Simple through transparency. | Simple through abstraction. |
+| **Technical Ceiling** | None (Owner of admission control). | High (Google-managed restrictions). |
 
-## 2. Key Observations & Challenges
+## 2. Replicating Autopilot Benefits in Standard
+Most of Autopilot's "benefits" are simply GKE Standard features enabled by default. We can achieve a similar "managed" posture in Standard without surrendering control:
 
-### 2.1 Spot Node "Hard-Forcing"
-In **GKE Standard**, forcing 100% Spot usage is straightforward: you simply create ONLY Spot-backed node pools. If quota is unavailable, the cluster just doesn't scale, but you have absolute cost certainty.
+*   **Secure by Default:** We enable `shielded_nodes`, `workload_identity`, and enforce the **Pod Security Admission (PSA)** "Restricted" profile at the namespace level.
+*   **Zero Node Management:** By enabling **Node Auto-provisioning (NAP)**, Standard can create new node pools on the fly. However, for Liferay's predictable workload, we prefer explicit pools for better cost tracking.
+*   **Managed Upgrades:** We use **Maintenance Windows** to automate upgrades while retaining the power to block them during critical release cycles.
 
-In **GKE Autopilot**, you cannot "force" the cluster to only use Spot at the infrastructure level. You must influence it through pod labels/annotations. As discovered in this POC:
--   **Scheduling Blocks**: If you use a "Required" affinity for Spot nodes and the GCE quota is reached, pods enter a `Pending` state that the cluster autoscaler cannot resolve ("Unhelpable").
--   **Fallback Requirement**: To ensure platform stability (e.g., ArgoCD), a "Preferred" affinity with a standard node fallback is required, which compromises the "Spot-only" cost goal.
+## 3. Why Autopilot Scaling is Irrelevant for Liferay
+A primary selling point of Autopilot is its ability to automatically provision "exotic" infrastructure (GPUs, specialized architectures) based on pod labels.
+*   **Uniformity:** Liferay DXP and its supporting services (Search, Database, Cache) run on standard x86 compute. We do not require specialized hardware or AI-workload scaling.
+*   **Predictability:** We already know our resource requirements. We do not need a "fancier" autoscaler to discover our needs; a standard Cluster Autoscaler fulfills 100% of Liferay's scaling requirements with higher reliability and lower cost.
 
-### 2.2 Cost Management Risks
-Autopilot shifts the responsibility of cost optimization from the Infrastructure Engineer to the Developer:
--   **Label Dependency**: If a developer forgets to add the correct Spot labels, GKE provisions standard (expensive) capacity by default.
--   **Provisioning Limits**: By default, there are no hard restrictions on how much can be provisioned. A misconfigured `ApplicationSet` could theoretically spin up hundreds of expensive standard pods instantly.
+## 4. Key Observations & Technical Hurdles
 
-## 3. Alternative Approaches
+### 4.1 The "CRD Blockade" (The Technical Ceiling)
+Autopilot's non-removable Admission Controller blocks certain "experimental" or "alpha" CRDs.
+*   **Issue:** The official **Envoy Gateway** OCI chart is blocked by Autopilot.
+*   **The Standard Advantage:** In Standard, we own the Admission Controller and can safely install the CRDs required for our modern Ingress/Gateway strategy.
 
-### 3.1 Kyverno Policy Enforcement (Current Approach)
-We are currently using Kyverno to automatically inject the correct labels into all pods. This centralizes the "infra task" but still requires the "Preferred" fallback to prevent scheduling deadlocks during quota shortages.
+### 4.2 Absolute Cost Certainty (The Financial Floor)
+*   **Standard:** We define a fixed-size Spot node pool for Dev/UAT. If pods exceed the quota, they stay `Pending`. We have a **hard floor** on costs.
+*   **Autopilot:** If a developer accidentally omits Spot labels or requests excessive resources, GKE provisions standard capacity and bills us immediately. Autopilot is an open-ended financial risk.
 
-### 3.2 Resource Quotas
-To mitigate the risk of runaway costs in Autopilot, we should implement **Kubernetes ResourceQuotas** at the namespace level. This sets a "hard ceiling" on how much total CPU/Memory a team can request, regardless of whether they use Spot or Standard nodes.
+### 4.3 Inflexible Upgrade Cycles
+In Autopilot, cluster and node upgrades happen automatically on Google's schedule.
+*   **Non-Deterministic Rollouts:** While Standard allows engineers to decide *when* and *how* to upgrade nodes (often following a meticulous process to minimize impact), Autopilot upgrades "just happen."
+*   **Operational Risk:** This can cause unexpected downtime or customer impact if the application is not perfectly resilient to sudden node rotations. For enterprise deployments, the ability to block or delay upgrades during critical business cycles is a foundational requirement that Autopilot removes.
 
-### 3.3 GKE Standard "Cost-Optimized"
-If absolute cost control and "Spot-only" enforcement are the highest priorities, GKE Standard remains the superior choice. It allows for rigid node-pool definitions that simply cannot provision standard capacity unless an administrator manually creates a new pool.
+### 4.4 Deterministic Troubleshooting
+*   **Standard:** If a pod won't schedule, we inspect the explicit state of the node pool. The cause (quota, taints, resources) is always transparent.
+*   **Autopilot:** Scheduling logic is a "Black Box." Troubleshooting often involves "tricking" the hidden scheduler using affinities, which increases cognitive load during outages.
 
-## 4. Conclusion
-While GKE Autopilot provides convenience and better alignment with managed AWS services, it requires a robust **Policy-Driven** approach (Kyverno + ResourceQuotas) to match the cost-predictability of GKE Standard.
+## 5. Comparison with AWS & The "Golden Path"
+While AWS EKS "Auto Mode" is attractive because EKS Standard lacks built-in node autoscaling, GKE Standard *already* includes a managed Cluster Autoscaler. The operational gap between "Standard" and "Auto" is much smaller on GCP, making the sacrifice of control in Autopilot unnecessary.
+
+## 6. Conclusion
+GKE Standard is the preferred "Golden Path." It aligns with the managed-services philosophy while providing the **determinism** and **transparency** required for enterprise Liferay deployments. We gain the operational benefits of a managed cluster without the price markup, the CRD restrictions, or the loss of cost control.
